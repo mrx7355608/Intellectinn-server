@@ -13,6 +13,53 @@ const signup = catchAsyncError(async (httpObject) => {
     };
 });
 
+const login = async (req, res, next) => {
+    passport.authenticate("local", (err, user, info) => {
+        if (err) {
+            return next(err);
+        }
+        if (!user) {
+            return res.status(400).json({
+                ok: false,
+                error: info.message,
+            });
+        }
+
+        // Create session for the user
+        createSessions(req, res, next);
+    })(req, res, next);
+};
+
+const logout = async (req, res, next) => {
+    req.logOut((err) => {
+        if (err) {
+            return next(err);
+        }
+
+        return res.status(200).json({
+            ok: true,
+            data: null,
+        });
+    });
+};
+
 export const authControllers = {
     signup,
+    login,
+    logout,
 };
+
+/*
+    Utility Functions
+*/
+function createSessions(req, res, next) {
+    req.login(user, (err) => {
+        if (err) {
+            return next(err);
+        }
+        return res.status(200).json({
+            ok: true,
+            data: user,
+        });
+    });
+}
