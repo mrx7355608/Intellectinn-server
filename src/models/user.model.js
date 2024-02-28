@@ -7,7 +7,10 @@ const userSchema = new Schema(
         email: { type: String, required: true },
         password: { type: String, required: true },
         googleId: { type: String, default: null },
-        profilePicture: { type: String, required: true },
+        profilePicture: {
+            type: String,
+            default: process.env.DEFAULT_PROFILE_PICTURE,
+        },
         about: { type: String, default: "" },
         followers: {
             type: [
