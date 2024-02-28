@@ -1,16 +1,12 @@
 import mongoose from "mongoose";
 
-let cachedConnection = null;
-
 export async function connectDB() {
-    if (cachedConnection) {
-        console.log("using already established connection");
-        return cachedConnection;
-    }
-
     const dbURL = process.env.DB_URL;
-    cachedConnection = await mongoose.connect(dbURL);
+    await mongoose.connect(dbURL);
     console.log("New database connection established");
+}
 
-    return cachedConnection;
+export async function getMongooseClient() {
+    const mongooseClient = mongoose.connection.getClient();
+    return mongooseClient;
 }
