@@ -9,6 +9,8 @@ const userSchema = new Schema(
         googleId: { type: String, required: true },
         profilePicture: { type: String, required: true },
         about: { type: String, required: true },
+        securityQues: { type: String, required: true },
+        securityAnswer: { type: String, required: true },
         followers: {
             type: [
                 {
