@@ -10,3 +10,8 @@ export async function getMongooseClient() {
     const mongooseClient = mongoose.connection.getClient();
     return mongooseClient;
 }
+
+export async function disconnectDB() {
+    await mongoose.disconnect();
+    console.log("Disconnected from database");
+}
