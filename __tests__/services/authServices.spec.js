@@ -33,4 +33,9 @@ describe("Auth Services", () => {
             expect(newUser.email).toBe("fwd@gmail.com");
         });
     });
+    // describe("Reset password", () => {
+    //     it.todo("should throw err if security answer verification fails");
+    //     it.todo("should validate new password");
+    //     it.todo("should update the user's password");
+    // });
 });
