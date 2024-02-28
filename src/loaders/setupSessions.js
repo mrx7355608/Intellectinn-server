@@ -3,6 +3,13 @@ import { getMongooseClient } from "../utils/db.js";
 import sessions from "express-session";
 
 export function setupSessions(app) {
+    // Setups mongodb for storing sessions by using
+    // existing mongoose connection so that un-necessary
+    // database connections can be avoided
+    // And because of this, the app should be created
+    // after connecting to database because it is
+    // being used by this mongo store to setup
+    // session storage
     const mongoStore = MongoStore.create({
         client: getMongooseClient(),
     });
