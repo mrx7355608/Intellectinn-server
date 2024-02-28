@@ -6,9 +6,9 @@ const userSchema = new Schema(
         fullname: { type: String, required: true },
         email: { type: String, required: true },
         password: { type: String, required: true },
-        googleId: { type: String, required: true },
+        googleId: { type: String, default: null },
         profilePicture: { type: String, required: true },
-        about: { type: String, required: true },
+        about: { type: String, default: "" },
         followers: {
             type: [
                 {
