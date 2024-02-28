@@ -3,6 +3,8 @@ import helmet from "helmet";
 import hpp from "hpp";
 import cors from "cors";
 import morgan from "morgan";
+import passport from "passport";
+import passportSetup from "./passportSetup.js";
 import { catch404, errorHandler } from "./utils/errorHandler.js";
 
 const app = express();
@@ -18,6 +20,9 @@ app.use(
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(passport.initialize());
+app.use(passport.session());
+passportSetup();
 
 // ROUTES
 
