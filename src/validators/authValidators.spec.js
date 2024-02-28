@@ -35,17 +35,57 @@ describe("Signup Validator", () => {
         });
     });
     describe("Email", () => {
-        it.todo("should throw error if email is not provided");
-        it.todo("should throw error if email is invalid");
-        it.todo("should throw error if email is not a text value");
-        it.todo("should throw error if email is empty");
+        it("should throw error if email is not provided", () => {
+            const d4 = { ...data };
+            delete d4.email;
+            expect(() => signupValidator(d4)).toThrow("Email is required");
+        });
+        it("should throw error if email is invalid", () => {
+            expect(() =>
+                signupValidator({ ...data, email: "invlaid@/dfmea.com" }),
+            ).toThrow("Invalid email");
+        });
+        it("should throw error if email is not a text value", () => {
+            expect(() => signupValidator({ ...data, email: null })).toThrow(
+                "Email should be a text value",
+            );
+        });
+        it("should throw error if email is empty", () => {
+            expect(() => signupValidator({ ...data, email: "" })).toThrow(
+                "Email cannot be empty",
+            );
+        });
     });
     describe("Password", () => {
-        it.todo("should throw error if password is not provided");
-        it.todo("should throw error if password is empty");
-        it.todo("should throw error if password is short");
-        it.todo("should throw error if password is huge");
-        it.todo("should throw error if password is not a text value");
+        it("should throw error if password is not provided", () => {
+            const d3 = { ...data };
+            delete d3.password;
+            expect(() => signupValidator(d3)).toThrow("Password is required");
+        });
+        it("should throw error if password is empty", () => {
+            expect(() => signupValidator({ ...data, password: "" })).toThrow(
+                "Password cannot be empty",
+            );
+        });
+        it("should throw error if password is short", () => {
+            expect(() => signupValidator({ ...data, password: "123" })).toThrow(
+                "Password should be 10 characters long at least",
+            );
+        });
+        it("should throw error if password is huge", () => {
+            expect(() =>
+                signupValidator({
+                    ...data,
+                    password:
+                        "184239482903849012839048190834-29138490-8349082394829471982748972389741897897qj9s89se",
+                }),
+            ).toThrow("Password cannot be longer than 30 characters");
+        });
+        it("should throw error if password is not a text value", () => {
+            expect(() => signupValidator({ ...data, password: null })).toThrow(
+                "Password should be a text value",
+            );
+        });
     });
     describe("Confirm Password", () => {
         it("should throw error if confirm password is not provided", () => {
