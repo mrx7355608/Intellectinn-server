@@ -11,22 +11,18 @@ export function AuthServices({ usersDB }) {
         if (userExists) {
             throw new ApiError(
                 "Email is already registered, use a different email",
-                400,
+                400
             );
         }
 
-        // Create user object with defualt values
-        const userObject = {
-            ...data,
-            profilePicture: process.env.DEFAULT_PROFILE_PICTURE,
-            followers: [],
-            following: [],
-            about: "",
-            googleId: null,
-        };
-
         // Save user in database
-        const newUser = await usersDB.insertNewUser(userObject);
+        const newUser = await usersDB.insertNewUser(data);
+
+        // Removing un-necessary fields from newUser object
+        newUser.password = undefined;
+        newUser.__v = undefined;
+        newUser.updatedAt = undefined;
+
         return newUser;
     };
 

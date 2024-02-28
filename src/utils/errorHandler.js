@@ -7,6 +7,7 @@ export function catch404(_req, _res, next) {
 export function errorHandler(err, _req, res, _next) {
     const status = err.statusCode || 500;
     const message = err.message || "Internal server error";
+    console.log({ message });
 
     if (process.env.NODE_ENV === "production") {
         res.status(status).json({

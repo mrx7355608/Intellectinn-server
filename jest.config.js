@@ -1,4 +1,4 @@
 export default {
     verbose: true,
-    detectOpenHandles: true
-}
+    detectOpenHandles: true,
+};
