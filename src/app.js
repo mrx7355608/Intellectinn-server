@@ -3,6 +3,7 @@ import helmet from "helmet";
 import hpp from "hpp";
 import cors from "cors";
 import morgan from "morgan";
+import { catch404, errorHandler } from "./utils/errorHandler.js";
 
 const app = express();
 
@@ -21,5 +22,7 @@ app.use(express.urlencoded({ extended: false }));
 // ROUTES
 
 // ERROR HANDLERS
+app.use(catch404);
+app.use(errorHandler);
 
 export { app };
