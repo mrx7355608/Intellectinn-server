@@ -17,6 +17,8 @@ describe("Auth Services", () => {
         const data = {
             fullname: "Fawad Imran",
             email: "fwd@gmail.com",
+            password: "123123123123123",
+            confirm_password: "123123123123123",
         };
 
         it("should throw err if email is already registered", async () => {
