@@ -1,6 +1,7 @@
 import { AuthServices } from "../services/auth.services.js";
 import { catchAsyncError } from "../utils/catchAsyncError.js";
 import { usersDB } from "../data/user.data.js";
+import passport from "passport";
 
 const authServices = AuthServices({ usersDB });
 
@@ -26,7 +27,7 @@ const login = async (req, res, next) => {
         }
 
         // Create session for the user
-        createSessions(req, res, next);
+        createSessions(user, req, res, next);
     })(req, res, next);
 };
 
@@ -52,11 +53,18 @@ export const authControllers = {
 /*
     Utility Functions
 */
-function createSessions(req, res, next) {
+function createSessions(user, req, res, next) {
     req.login(user, (err) => {
         if (err) {
             return next(err);
         }
+
+        // Remove sensitive fields from user object
+        user.password = undefined;
+        user.__v = undefined;
+        user.updatedAt = undefined;
+        user.googleId = undefined;
+
         return res.status(200).json({
             ok: true,
             data: user,
