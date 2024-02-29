@@ -1,6 +1,6 @@
 import passport from "passport";
 import { Strategy } from "passport-local";
-import { UserModel } from "./models/user.model.js";
+import { UserModel } from "./users/user.model.js";
 import bc from "bcryptjs";
 
 export default function passportSetup() {
@@ -19,7 +19,7 @@ export default function passportSetup() {
                 // Validate password
                 const isValidPassword = await bc.compare(
                     password,
-                    user.password,
+                    user.password
                 );
                 if (!isValidPassword) {
                     return done(null, false, {
@@ -28,8 +28,8 @@ export default function passportSetup() {
                 }
 
                 return done(null, user);
-            },
-        ),
+            }
+        )
     );
 
     passport.serializeUser((user, done) => done(null, user.id));

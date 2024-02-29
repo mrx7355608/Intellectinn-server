@@ -1,4 +1,4 @@
-import { AuthServices } from "../../src/services/auth.services.js";
+import { AuthServices } from "../../src/auth/auth.services.js";
 import jest from "jest-mock";
 
 const usersDB = {
@@ -26,7 +26,7 @@ describe("Auth Services", () => {
                 await authServices.signup(data);
             } catch (err) {
                 expect(err.message).toBe(
-                    "Email is already registered, use a different email",
+                    "Email is already registered, use a different email"
                 );
             }
         });
