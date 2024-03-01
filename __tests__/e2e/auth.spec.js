@@ -39,7 +39,7 @@ describe("Auth tests", () => {
                 .expect(400);
             expect(response.body.ok).toBe(false);
             expect(response.body.error).toBe(
-                "Email is already registered, use a different email",
+                "Email is already registered, use a different email"
             );
         });
         it.skip("(passing) should create a new user", async () => {
@@ -78,7 +78,7 @@ describe("Auth tests", () => {
                 .expect(403);
             expect(signupResponse.body.ok).toBe(false);
             expect(signupResponse.body.error).toBe(
-                "You are already logged in, please logout to continue",
+                "You are already logged in, please logout to continue"
             );
         });
     });
@@ -140,7 +140,7 @@ describe("Auth tests", () => {
                 .expect(403);
             expect(response.body.ok).toBe(false);
             expect(response.body.error).toBe(
-                "You are already logged in, please logout to continue",
+                "You are already logged in, please logout to continue"
             );
         });
     });
@@ -161,7 +161,7 @@ describe("Auth tests", () => {
             expect(response.body.ok).toBe(true);
         });
         it("should not allow non-logged in user to logout", async () => {
-            const response = await agent.post("/api/auth/logout").expect(403);
+            const response = await agent.post("/api/auth/logout").expect(401);
             expect(response.body.ok).toBe(false);
             expect(response.body.error).toBe("Not authenticated");
         });
