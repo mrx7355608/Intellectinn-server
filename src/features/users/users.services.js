@@ -1,5 +1,7 @@
 import { validateMongoID } from "../../utils/validateMongoId.js";
 import { ApiError } from "../../utils/ApiError.js";
+import { editDataValidator } from "./user.validators.js";
+import { filterUnwantedFields } from "../../utils/filterUnwantedFields.js";
 
 export function UserServices({ usersDB }) {
     const _userExists = async (id) => {
@@ -49,16 +51,19 @@ export function UserServices({ usersDB }) {
     };
 
     // EDIT USER
-    const editUser = async (id, changes) => {
-        validateMongoID(id, "user");
+    const editUser = async (userId, changes) => {
+        // Remove un-necessary fields from "changes" object
+        const filteredChangesObject = filterUnwantedFields(changes, [
+            "profilePicture",
+            "about",
+        ]);
 
-        // TODO: validate user changes
-
-        if (_userExists(id)) {
-            throw new ApiError("Account not found", 404);
-        }
-
-        const updatedUser = await usersDB.updateUser(id, changes);
+        // Validate user changes
+        editDataValidator(filteredChangesObject);
+        const updatedUser = await usersDB.updateUser(
+            userId,
+            filteredChangesObject
+        );
         return updatedUser;
     };
 
