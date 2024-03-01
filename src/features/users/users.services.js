@@ -60,6 +60,8 @@ export function UserServices({ usersDB }) {
 
         // Validate user changes
         editDataValidator(filteredChangesObject);
+
+        // Update user
         const updatedUser = await usersDB.updateUser(
             userId,
             filteredChangesObject
@@ -69,16 +71,8 @@ export function UserServices({ usersDB }) {
 
     // REMOVE USER
     const removeUser = async (id) => {
-        validateMongoID(id, "user");
-
-        // Check if user exists
-        if (_userExists(id)) {
-            throw new ApiError("Account no longer exists");
-        }
-
         // Delete user's account
         await usersDB.deleteUser(id);
-
         return null;
     };
 
