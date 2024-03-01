@@ -12,7 +12,11 @@ const mockUser = {
 };
 
 const usersDB = {
-    findUserById: jest.fn().mockReturnValueOnce(false).mockReturnValue(true),
+    findUserById: jest
+        .fn()
+        .mockReturnValueOnce(false)
+        .mockReturnValueOnce(true)
+        .mockReturnValueOnce(false),
 };
 
 const userServices = UserServices({ usersDB });
@@ -69,9 +73,7 @@ describe("User services tests", () => {
                     mockUser
                 );
             } catch (err) {
-                expect(err.message).toBe(
-                    "User is already not in your followings list"
-                );
+                expect(err.message).toBe("You are not following this user");
             }
         });
     });
@@ -100,6 +102,22 @@ describe("User services tests", () => {
                 });
             } catch (err) {
                 expect(err.message).toBe("Invalid about content");
+            }
+        });
+    });
+    describe("List users profile", () => {
+        it("should validate user's id", async () => {
+            try {
+                await userServices.listUserProfile("12312");
+            } catch (err) {
+                expect(err.message).toBe("Invalid user id");
+            }
+        });
+        it("should return error if user does not exist", async () => {
+            try {
+                await userServices.listUserProfile("65df279c33408a83bba2ca94");
+            } catch (err) {
+                expect(err.message).toBe("User not found");
             }
         });
     });
