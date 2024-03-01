@@ -35,33 +35,49 @@ async function deleteUser(id) {
 
 // INSERT IN FOLLOWING
 async function insertInFollowing(followerID, followingID) {
-    const updatedUser = await UserModel.findByIdAndUpdate(followerID, {
-        $push: { following: followingID },
-    });
+    const updatedUser = await UserModel.findByIdAndUpdate(
+        followerID,
+        {
+            $push: { following: followingID },
+        },
+        { new: true }
+    );
     return updatedUser;
 }
 
 // INSERT IN FOLLOWERS
 async function insertInFollowers(followerID, followingID) {
-    const updatedUser = await UserModel.findByIdAndUpdate(followingID, {
-        $push: { followers: followerID },
-    });
+    const updatedUser = await UserModel.findByIdAndUpdate(
+        followingID,
+        {
+            $push: { followers: followerID },
+        },
+        { new: true }
+    );
     return updatedUser;
 }
 
 // REMOVE FROM FOLLOWING
 async function removeFromFollowing(followerID, followingID) {
-    const updatedUser = await UserModel.findByIdAndUpdate(followerID, {
-        $pull: { following: followingID },
-    });
+    const updatedUser = await UserModel.findByIdAndUpdate(
+        followerID,
+        {
+            $pull: { following: followingID },
+        },
+        { new: true }
+    );
     return updatedUser;
 }
 
 // REMOVE FROM FOLLOWERS
 async function removeFromFollowers(followerID, followingID) {
-    const updatedUser = await UserModel.findByIdAndUpdate(followingID, {
-        $pull: { followers: followerID },
-    });
+    const updatedUser = await UserModel.findByIdAndUpdate(
+        followingID,
+        {
+            $pull: { followers: followerID },
+        },
+        { new: true }
+    );
     return updatedUser;
 }
 

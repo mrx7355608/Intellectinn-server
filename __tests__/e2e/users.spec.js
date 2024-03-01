@@ -65,7 +65,26 @@ describe("Auth tests", () => {
         });
     });
 
-    describe("Follow user", () => {
-        it.todo("should foll");
+    describe("Follow / Unfollow user", () => {
+        it("should follow user", async () => {
+            const response = await agent
+                .patch("/api/users/follow/65df279c33408a83bba2ca94")
+                .set("Cookie", cookies)
+                .expect(200);
+            expect(response.body.ok).toBe(true);
+            // response.body.data is a list of users I am following
+            expect(response.body.data).toContain("65df279c33408a83bba2ca94");
+        });
+        it("should unfollow user", async () => {
+            const response = await agent
+                .patch("/api/users/unfollow/65df279c33408a83bba2ca94")
+                .set("Cookie", cookies)
+                .expect(200);
+            expect(response.body.ok).toBe(true);
+            // response.body.data is a list of users I am following
+            expect(response.body.data).not.toContain(
+                "65df279c33408a83bba2ca94"
+            );
+        });
     });
 });
