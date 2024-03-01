@@ -1,5 +1,5 @@
 import joi from "joi";
-import { ApiError } from "../utils/ApiError.js";
+import { ApiError } from "../../utils/ApiError.js";
 
 const signupValidationSchema = joi.object({
     fullname: joi.string().min(8).max(15).required().messages({
