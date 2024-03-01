@@ -35,7 +35,7 @@ async function deleteUser(id) {
 
 // INSERT IN FOLLOWING
 async function insertInFollowing(followerID, followingID) {
-    const updatedUser = await UserModel.findById(followerID, {
+    const updatedUser = await UserModel.findByIdAndUpdate(followerID, {
         $push: { following: followingID },
     });
     return updatedUser;
@@ -43,7 +43,7 @@ async function insertInFollowing(followerID, followingID) {
 
 // INSERT IN FOLLOWERS
 async function insertInFollowers(followerID, followingID) {
-    const updatedUser = await UserModel.findById(followingID, {
+    const updatedUser = await UserModel.findByIdAndUpdate(followingID, {
         $push: { followers: followerID },
     });
     return updatedUser;
@@ -51,7 +51,7 @@ async function insertInFollowers(followerID, followingID) {
 
 // REMOVE FROM FOLLOWING
 async function removeFromFollowing(followerID, followingID) {
-    const updatedUser = await UserModel.findById(followerID, {
+    const updatedUser = await UserModel.findByIdAndUpdate(followerID, {
         $pull: { following: followingID },
     });
     return updatedUser;
@@ -59,7 +59,7 @@ async function removeFromFollowing(followerID, followingID) {
 
 // REMOVE FROM FOLLOWERS
 async function removeFromFollowers(followerID, followingID) {
-    const updatedUser = await UserModel.findById(followingID, {
+    const updatedUser = await UserModel.findByIdAndUpdate(followingID, {
         $pull: { followers: followerID },
     });
     return updatedUser;
