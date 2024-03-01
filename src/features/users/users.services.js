@@ -10,43 +10,41 @@ export function UserServices({ usersDB }) {
     };
 
     // FOLLOW USER
-    const followUser = async (followingID, user) => {
-        validateMongoID(followingID, "user");
+    const followUser = async (userToFollowID, me) => {
+        validateMongoID(userToFollowID, "user");
 
         // Check if user exists
-        if (!(await _userExists(followingID))) {
+        const userToFollow = await _userExists(userToFollowID);
+        if (!userToFollow) {
             throw new ApiError("User does not exist");
         }
 
-        if (user.following.includes(followingID)) {
+        if (me.following.includes(userToFollowID)) {
             throw new ApiError("You are already following this user", 400);
         }
 
-        const updatedUser = await usersDB.updateUser(user._id, {
-            $push: { following: followingID },
-        });
-        await usersDB.updateUser(followingID, {
-            $push: { followers: user._id },
-        });
+        const updatedUser = await usersDB.insertInFollowing(
+            me._id,
+            userToFollowID
+        );
+        await usersDB.insertInFollowers(userToFollowID, me._id);
 
         return updatedUser.following;
     };
 
     // UN-FOLLOW USER
-    const unfollowUser = async (followingID, user) => {
-        validateMongoID(followingID, "user");
+    const unfollowUser = async (unfollowUserID, me) => {
+        validateMongoID(unfollowUserID, "user");
         // Check if user is following him
-        if (user.following.includes(followingID) === false) {
-            throw new ApiError(
-                "User is already not in your followings list",
-                404,
-            );
+        if (me.following.includes(unfollowUserID) === false) {
+            throw new ApiError("You are not following this user", 400);
         }
 
         // If yes, then unfollow user
-        const updatedUser = await usersDB.updatedUser(user._id, {
-            $pull: { following: followingID },
-        });
+        const updatedUser = await usersDB.removeFromFollowing(
+            me._id,
+            unfollowUserID
+        );
         return updatedUser.following;
     };
 
@@ -64,7 +62,7 @@ export function UserServices({ usersDB }) {
         // Update user
         const updatedUser = await usersDB.updateUser(
             userId,
-            filteredChangesObject,
+            filteredChangesObject
         );
         return updatedUser;
     };
@@ -89,6 +87,7 @@ export function UserServices({ usersDB }) {
         user.updatedAt = undefined;
         user.password = undefined;
         user.email = undefined;
+        user.googleId = undefined;
 
         return user;
     };
