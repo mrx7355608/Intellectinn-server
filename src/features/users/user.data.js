@@ -33,10 +33,46 @@ async function deleteUser(id) {
     return null;
 }
 
+// INSERT IN FOLLOWING
+async function insertInFollowing(followerID, followingID) {
+    const updatedUser = await UserModel.findById(followerID, {
+        $push: { following: followingID },
+    });
+    return updatedUser;
+}
+
+// INSERT IN FOLLOWERS
+async function insertInFollowers(followerID, followingID) {
+    const updatedUser = await UserModel.findById(followingID, {
+        $push: { followers: followerID },
+    });
+    return updatedUser;
+}
+
+// REMOVE FROM FOLLOWING
+async function removeFromFollowing(followerID, followingID) {
+    const updatedUser = await UserModel.findById(followerID, {
+        $pull: { following: followingID },
+    });
+    return updatedUser;
+}
+
+// REMOVE FROM FOLLOWERS
+async function removeFromFollowers(followerID, followingID) {
+    const updatedUser = await UserModel.findById(followingID, {
+        $pull: { followers: followerID },
+    });
+    return updatedUser;
+}
+
 export const usersDB = {
     findUserById,
     findUserByEmail,
     updateUser,
     insertNewUser,
     deleteUser,
+    insertInFollowers,
+    insertInFollowing,
+    removeFromFollowers,
+    removeFromFollowing,
 };
