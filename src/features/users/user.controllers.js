@@ -19,7 +19,7 @@ const unfollowUser = catchAsyncError(async (httpObject) => {
     const { followingID } = httpObject.params;
     const updatedFollowings = await userServices.unfollowUser(
         followingID,
-        user,
+        user
     );
     return {
         status: 200,
@@ -62,6 +62,7 @@ const getLoggedInUser = catchAsyncError(async (httpObject) => {
     user.email = undefined;
     user.__v = undefined;
     user.updatedAt = undefined;
+    user.googleId = undefined;
 
     return {
         status: 200,
