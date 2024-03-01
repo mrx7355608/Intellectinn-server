@@ -1,17 +1,18 @@
 import { validateMongoID } from "../../utils/validateMongoId.js";
+import { ApiError } from "../../utils/ApiError.js";
 
 export function UserServices({ usersDB }) {
     const _userExists = async (id) => {
-        const user = await usersDB.findById(id);
+        const user = await usersDB.findUserById(id);
         return user;
     };
 
     // FOLLOW USER
     const followUser = async (followingID, user) => {
-        validateMongoID(followingID);
+        validateMongoID(followingID, "user");
 
-        // Check if user exitss
-        if (_userExists(followingID)) {
+        // Check if user exists
+        if (!(await _userExists(followingID))) {
             throw new ApiError("User does not exist");
         }
 
@@ -19,10 +20,10 @@ export function UserServices({ usersDB }) {
             throw new ApiError("You are already following this user", 400);
         }
 
-        const updatedUser = await usersDB.updatedUser(user._id, {
+        const updatedUser = await usersDB.updateUser(user._id, {
             $push: { following: followingID },
         });
-        await usersDB.updatedUser(followingID, {
+        await usersDB.updateUser(followingID, {
             $push: { followers: user._id },
         });
 
@@ -30,13 +31,13 @@ export function UserServices({ usersDB }) {
     };
 
     // UN-FOLLOW USER
-    const unfollowUser = async (user, followingID) => {
-        validateMongoID(followingID);
+    const unfollowUser = async (followingID, user) => {
+        validateMongoID(followingID, "user");
         // Check if user is following him
         if (user.following.includes(followingID) === false) {
             throw new ApiError(
-                "User does not exist in your followings list",
-                404,
+                "User is already not in your followings list",
+                404
             );
         }
 
