@@ -1,5 +1,5 @@
 import { AuthServices } from "./auth.services.js";
-import { catchAsyncError } from "../utils/catchAsyncError.js";
+import { catchAsyncError } from "../../utils/catchAsyncError.js";
 import { usersDB } from "../users/user.data.js";
 import passport from "passport";
 

@@ -3,7 +3,7 @@ import { setupGenerals } from "./loaders/setupGeneralStuff.js";
 import { setupSessions } from "./loaders/setupSessions.js";
 import { setupPassport } from "./loaders/setupPassport.js";
 import { catch404, errorHandler } from "./utils/errorHandler.js";
-import { authRouter } from "./auth/auth.routes.js";
+import { authRouter } from "./features/auth/auth.routes.js";
 
 export function createAndSetupApp() {
     const app = express();

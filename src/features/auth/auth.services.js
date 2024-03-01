@@ -1,4 +1,4 @@
-import { ApiError } from "../utils/ApiError.js";
+import { ApiError } from "../../utils/ApiError.js";
 import { signupValidator } from "./auth.validators.js";
 
 export function AuthServices({ usersDB }) {
@@ -11,7 +11,7 @@ export function AuthServices({ usersDB }) {
         if (userExists) {
             throw new ApiError(
                 "Email is already registered, use a different email",
-                400
+                400,
             );
         }
 
