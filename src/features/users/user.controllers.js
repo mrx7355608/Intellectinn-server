@@ -46,9 +46,34 @@ const deleteUser = catchAsyncError(async (httpObject) => {
     };
 });
 
+const getUserProfile = catchAsyncError(async (httpObject) => {
+    const { userID } = httpObject.params;
+    const user = await userServices.listUserProfile(userID);
+    return {
+        status: 200,
+        data: user,
+    };
+});
+
+const getLoggedInUser = catchAsyncError(async (httpObject) => {
+    const { user } = httpObject;
+
+    user.password = undefined;
+    user.email = undefined;
+    user.__v = undefined;
+    user.updatedAt = undefined;
+
+    return {
+        status: 200,
+        data: user,
+    };
+});
+
 export const userControllers = {
     followUser,
     unfollowUser,
     editUser,
     deleteUser,
+    getUserProfile,
+    getLoggedInUser,
 };

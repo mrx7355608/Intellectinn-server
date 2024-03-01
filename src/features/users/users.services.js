@@ -39,7 +39,7 @@ export function UserServices({ usersDB }) {
         if (user.following.includes(followingID) === false) {
             throw new ApiError(
                 "User is already not in your followings list",
-                404
+                404,
             );
         }
 
@@ -64,7 +64,7 @@ export function UserServices({ usersDB }) {
         // Update user
         const updatedUser = await usersDB.updateUser(
             userId,
-            filteredChangesObject
+            filteredChangesObject,
         );
         return updatedUser;
     };
@@ -76,5 +76,21 @@ export function UserServices({ usersDB }) {
         return null;
     };
 
-    return { followUser, unfollowUser, editUser, removeUser };
+    // GET PROFILE OF A USER
+    const listUserProfile = async (id) => {
+        validateMongoID(id, "user");
+        const user = await _userExists(id);
+        if (!user) {
+            throw new ApiError("User not found", 404);
+        }
+
+        // Remove sensitive fields
+        user.__v = undefined;
+        user.updatedAt = undefined;
+        user.password = undefined;
+        user.email = undefined;
+
+        return user;
+    };
+    return { followUser, unfollowUser, editUser, removeUser, listUserProfile };
 }
