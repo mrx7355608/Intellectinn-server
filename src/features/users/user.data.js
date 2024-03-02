@@ -1,36 +1,12 @@
 import { UserModel } from "./user.model.js";
+import { BaseDataLayerFunctions } from "../../utils/BaseDataLayerFunctions.js";
 
-// FIND BY ID
-async function findUserById(id) {
-    const user = await UserModel.findById(id, "-password -__v");
-    return user;
-}
+const baseFunctions = BaseDataLayerFunctions(UserModel);
 
 // FIND BY EMAIL
 async function findUserByEmail(email) {
     const user = await UserModel.findOne({ email }, "-password -__v");
     return user;
-}
-
-// INSERT NEW USER
-async function insertNewUser(data) {
-    const newUser = await UserModel.create(data);
-    return newUser;
-}
-
-// UPDATE USER
-async function updateUser(id, changes) {
-    const updatedUser = await UserModel.findByIdAndUpdate(id, changes, {
-        select: { password: 0, __v: 0 },
-        new: true,
-    });
-    return updatedUser;
-}
-
-// DELETE USER
-async function deleteUser(id) {
-    await UserModel.findByIdAndDelete(id);
-    return null;
 }
 
 // INSERT IN FOLLOWING
@@ -40,7 +16,7 @@ async function insertInFollowing(followerID, followingID) {
         {
             $push: { following: followingID },
         },
-        { new: true }
+        { new: true },
     );
     return updatedUser;
 }
@@ -52,7 +28,7 @@ async function insertInFollowers(followerID, followingID) {
         {
             $push: { followers: followerID },
         },
-        { new: true }
+        { new: true },
     );
     return updatedUser;
 }
@@ -64,7 +40,7 @@ async function removeFromFollowing(followerID, followingID) {
         {
             $pull: { following: followingID },
         },
-        { new: true }
+        { new: true },
     );
     return updatedUser;
 }
@@ -76,17 +52,17 @@ async function removeFromFollowers(followerID, followingID) {
         {
             $pull: { followers: followerID },
         },
-        { new: true }
+        { new: true },
     );
     return updatedUser;
 }
 
 export const usersDB = {
-    findUserById,
+    findUserById: baseFunctions.findById,
+    updateUser: baseFunctions.updateData,
+    insertNewUser: baseFunctions.insertData,
+    deleteUser: baseFunctions.deleteData,
     findUserByEmail,
-    updateUser,
-    insertNewUser,
-    deleteUser,
     insertInFollowers,
     insertInFollowing,
     removeFromFollowers,
