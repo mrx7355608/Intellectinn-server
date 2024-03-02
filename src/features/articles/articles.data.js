@@ -9,7 +9,14 @@ async function findBySlug(slug) {
     return article;
 }
 
+// FIND BY CATEGORY
+async function findByCategory(category) {
+    const articles = await ArticleModel.find({ category });
+    return articles;
+}
+
 export const articlesDB = {
     ...baseFunctions,
     findBySlug,
+    findByCategory,
 };
