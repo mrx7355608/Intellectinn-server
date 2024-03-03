@@ -5,6 +5,15 @@ import { validateMongoID } from "../../utils/validateMongoId.js";
 
 export function ArticleServices({ articlesDB }) {
     const listAllArticles = async () => {
+        const articles = await articlesDB.findAll();
+        const populatedArticles = await articles.populate(
+            "author",
+            "fullname profilePicture"
+        );
+        return populatedArticles;
+    };
+
+    const listPublishedArticles = async () => {
         const articles = await articlesDB.findByFilter({ is_published: true });
         const populatedArticles = await articles.populate(
             "author",
@@ -56,7 +65,7 @@ export function ArticleServices({ articlesDB }) {
         return newArticle;
     };
 
-    const editArticle = async (id, userId) => {
+    const editArticle = async (id, userId, changes) => {
         const article = await verifyArticleUtil(id);
 
         // Check if user is the author
@@ -65,7 +74,7 @@ export function ArticleServices({ articlesDB }) {
         }
 
         // Delete article
-        const updatedArticle = await articlesDB.updateData(id);
+        const updatedArticle = await articlesDB.updateData(id, changes);
         return updatedArticle;
     };
 
@@ -175,6 +184,7 @@ export function ArticleServices({ articlesDB }) {
         listAllArticles,
         unPublishArticle,
         listOneArticleBySlug,
+        listPublishedArticles,
         listArticlesByCategory,
         verifyArticleUtil,
     };
