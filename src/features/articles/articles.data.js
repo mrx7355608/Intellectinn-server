@@ -3,20 +3,20 @@ import { BaseDataLayerFunctions } from "../../utils/BaseDataLayerFunctions.js";
 
 const baseFunctions = BaseDataLayerFunctions(ArticleModel);
 
-// FIND BY SLUG
-async function findBySlug(slug) {
+// FIND BY FILTER
+async function findByFilter(filter) {
+    const articles = await ArticleModel.find(filter);
+    return articles;
+}
+
+// FIND ONE BY SLUG
+async function findOneBySlug(slug) {
     const article = await ArticleModel.findOne({ slug });
     return article;
 }
 
-// FIND BY CATEGORY
-async function findByCategory(category) {
-    const articles = await ArticleModel.find({ category });
-    return articles;
-}
-
 export const articlesDB = {
     ...baseFunctions,
-    findBySlug,
-    findByCategory,
+    findOneBySlug,
+    findByFilter,
 };
