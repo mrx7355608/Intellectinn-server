@@ -1,11 +1,16 @@
 import { ArticleServices } from "../../src/features/articles/articles.services.js";
 import jest from "jest-mock";
 
-const mockArticle = {
+const mockArticleWithAuthor = {
+    _id: "65e44a2f701161ae7a5ff624",
+    author: "65e44a401b2d7b2678969fca",
+};
+
+const mockArticleWithLikes = {
     _id: "65e44a2f701161ae7a5ff624",
     likes: ["65e44a401b2d7b2678969fca"],
 };
-const mockArticle2 = {
+const mockArticleWithNoLikes = {
     _id: "65e44a2f701161ae7a5ff624",
     likes: [],
 };
@@ -15,33 +20,61 @@ const articlesDB = {
     findById: jest
         .fn()
         .mockReturnValueOnce(null)
-        .mockReturnValueOnce(mockArticle)
-        .mockReturnValueOnce(null)
-        .mockReturnValueOnce(mockArticle2),
+        .mockReturnValueOnce(mockArticleWithAuthor)
+        .mockReturnValueOnce(mockArticleWithAuthor)
+        .mockReturnValueOnce(mockArticleWithLikes)
+        .mockReturnValueOnce(mockArticleWithNoLikes),
 };
 
 const articleServices = ArticleServices({ articlesDB });
 
 describe("Article Services Tests", () => {
-    describe("Edit article", () => {});
-
-    describe("Delete article", () => {});
-
-    describe("Like article", () => {
-        it("should throw error if article id is invalid", async () => {
+    describe("Verify article util func tests", () => {
+        it("should validate article id", async () => {
             try {
-                await articleServices.likeArticle(2311231);
+                const userID = "65e44a2f701161ae7a5ff624";
+                const articleID = "65e4559a6fad663233";
+                await articleServices.verifyArticle(articleID, userID);
             } catch (err) {
                 expect(err.message).toBe("Invalid article id");
             }
         });
         it("should throw error if article does not exist", async () => {
             try {
-                await articleServices.likeArticle("65e448ba95c33ebb3a906aec");
+                const userID = "65e44a2f701161ae7a5ff624";
+                const articleID = "65e4559a6fad6ae734163233";
+                await articleServices.verifyArticle(articleID, userID);
             } catch (err) {
                 expect(err.message).toBe("Article not found");
             }
         });
+    });
+
+    describe("Edit article", () => {
+        it("should throw error if user is not the article's author", async () => {
+            try {
+                const userID = "65e456094561d1b9ad011776";
+                const articleID = "65e448ba95c33ebb3a906aec";
+                await articleServices.editArticle(articleID, userID);
+            } catch (err) {
+                expect(err.message).toBe("You cannot edit this article");
+            }
+        });
+    });
+
+    describe("Delete article", () => {
+        it("should throw error if user is not the article's author", async () => {
+            try {
+                const userID = "65e44a2f701161ae7a5ff624";
+                const articleID = "65e448ba95c33ebb3a906aec";
+                await articleServices.removeArticle(articleID, userID);
+            } catch (err) {
+                expect(err.message).toBe("You cannot delete this article");
+            }
+        });
+    });
+
+    describe("Like article", () => {
         it("should throw error if user has already liked the article", async () => {
             try {
                 const articleID = "65e44a2f701161ae7a5ff624";
@@ -54,20 +87,6 @@ describe("Article Services Tests", () => {
     });
 
     describe("Unlike article", () => {
-        it("should throw error if article id is invalid", async () => {
-            try {
-                await articleServices.unlikeArticle(2311231);
-            } catch (err) {
-                expect(err.message).toBe("Invalid article id");
-            }
-        });
-        it("should throw error if article does not exist", async () => {
-            try {
-                await articleServices.unlikeArticle("65e448ba95c33ebb3a906aec");
-            } catch (err) {
-                expect(err.message).toBe("Article not found");
-            }
-        });
         it("should throw error if user has not liked the article yet", async () => {
             try {
                 const articleID = "65e44a2f701161ae7a5ff624";
