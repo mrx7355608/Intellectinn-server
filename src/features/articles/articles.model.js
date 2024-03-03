@@ -11,10 +11,11 @@ const articleSchema = new Schema(
         author: { type: Schema.Types.ObjectId, required: true, ref: "User" },
         likes: { type: [String], default: [] },
         timeToReadInMinutes: { type: String, required: true },
+        is_published: { type: Boolean, default: true },
     },
     {
         timestamps: true,
-    },
+    }
 );
 
 const ArticleModel = model("Article", articleSchema);
