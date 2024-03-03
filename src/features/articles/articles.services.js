@@ -57,7 +57,7 @@ export function ArticleServices({ articlesDB }) {
     };
 
     const editArticle = async (id, userId) => {
-        const article = await verifyArticle(id);
+        const article = await verifyArticleUtil(id);
 
         // Check if user is the author
         if (article.author !== userId) {
@@ -70,7 +70,7 @@ export function ArticleServices({ articlesDB }) {
     };
 
     const removeArticle = async (id, userId) => {
-        const article = await verifyArticle(id);
+        const article = await verifyArticleUtil(id);
 
         // Check if user is the author
         if (article.author !== userId) {
@@ -82,12 +82,44 @@ export function ArticleServices({ articlesDB }) {
         return null;
     };
 
-    const publishArticle = async () => {};
+    const publishArticle = async (id, userId) => {
+        const article = await verifyArticleUtil(id);
 
-    const unPublishArticle = async () => {};
+        // Check if the user is author of article
+        if (article.author !== userId) {
+            throw new ApiError("You cannot publish this article", 403);
+        }
+
+        // Check if article is already published
+        if (article.is_published === true) {
+            throw new ApiError("Article is published already", 400);
+        }
+
+        // Unpublish article
+        await articlesDB.updateData(id, { is_published: true });
+        return null;
+    };
+
+    const unPublishArticle = async (id, userId) => {
+        const article = await verifyArticleUtil(id);
+
+        // Check if the user is author of article
+        if (article.author !== userId) {
+            throw new ApiError("You cannot un-publish this article", 403);
+        }
+
+        // Check if article is already un-published
+        if (article.is_published === false) {
+            throw new ApiError("Article has not been published yet", 400);
+        }
+
+        // Unpublish article
+        await articlesDB.updateData(id, { is_published: false });
+        return null;
+    };
 
     const likeArticle = async (id, userId) => {
-        const article = await verifyArticle(id);
+        const article = await verifyArticleUtil(id);
 
         // Check if user has already liked the article
         if (article.likes.includes(userId)) {
@@ -100,7 +132,7 @@ export function ArticleServices({ articlesDB }) {
     };
 
     const unlikeArticle = async (id, userId) => {
-        const article = await verifyArticle(id);
+        const article = await verifyArticleUtil(id);
 
         // Check if user has already previously not liked the article
         if (article.likes.includes(userId) === false) {
@@ -120,7 +152,7 @@ export function ArticleServices({ articlesDB }) {
 
     // This function validates the article id and
     // also checks whether or not this article exists in database
-    const verifyArticle = async (id) => {
+    const verifyArticleUtil = async (id) => {
         // Validate article id
         validateMongoID(id, "article");
 
@@ -144,6 +176,6 @@ export function ArticleServices({ articlesDB }) {
         unPublishArticle,
         listOneArticleBySlug,
         listArticlesByCategory,
-        verifyArticle,
+        verifyArticleUtil,
     };
 }

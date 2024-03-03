@@ -14,6 +14,16 @@ const mockArticleWithNoLikes = {
     _id: "65e44a2f701161ae7a5ff624",
     likes: [],
 };
+const mockPublishedArticle = {
+    _id: "65e44a2f701161ae7a5ff624",
+    author: "65e45dd6dba6a2185b189492",
+    is_published: true,
+};
+const mockUnPublishedArticle = {
+    _id: "65e44a2f701161ae7a5ff624",
+    author: "65e45dd6dba6a2185b189492",
+    is_published: false,
+};
 
 const articlesDB = {
     findOneBySlug: jest.fn().mockReturnValue(null), // returning null indicates that article was not found
@@ -23,7 +33,10 @@ const articlesDB = {
         .mockReturnValueOnce(mockArticleWithAuthor)
         .mockReturnValueOnce(mockArticleWithAuthor)
         .mockReturnValueOnce(mockArticleWithLikes)
-        .mockReturnValueOnce(mockArticleWithNoLikes),
+        .mockReturnValueOnce(mockArticleWithNoLikes)
+        .mockReturnValueOnce(mockPublishedArticle)
+        .mockReturnValueOnce(mockPublishedArticle)
+        .mockReturnValue(mockUnPublishedArticle),
 };
 
 const articleServices = ArticleServices({ articlesDB });
@@ -34,7 +47,7 @@ describe("Article Services Tests", () => {
             try {
                 const userID = "65e44a2f701161ae7a5ff624";
                 const articleID = "65e4559a6fad663233";
-                await articleServices.verifyArticle(articleID, userID);
+                await articleServices.verifyArticleUtil(articleID, userID);
             } catch (err) {
                 expect(err.message).toBe("Invalid article id");
             }
@@ -43,7 +56,7 @@ describe("Article Services Tests", () => {
             try {
                 const userID = "65e44a2f701161ae7a5ff624";
                 const articleID = "65e4559a6fad6ae734163233";
-                await articleServices.verifyArticle(articleID, userID);
+                await articleServices.verifyArticleUtil(articleID, userID);
             } catch (err) {
                 expect(err.message).toBe("Article not found");
             }
@@ -123,6 +136,48 @@ describe("Article Services Tests", () => {
                 await articleServices.listArticlesByCategory("asdjfklasdj");
             } catch (err) {
                 expect(err.message).toBe("Unknown category");
+            }
+        });
+    });
+
+    describe("Publish article", () => {
+        it("should throw error if user is not the author of the article", async () => {
+            try {
+                const articleID = "65e44a2f701161ae7a5ff624";
+                const userID = "65e462663b44220d3c18bb21";
+                await articleServices.publishArticle(articleID, userID);
+            } catch (err) {
+                expect(err.message).toBe("You cannot publish this article");
+            }
+        });
+        it("should throw error if article is already published", async () => {
+            try {
+                const articleID = "65e44a2f701161ae7a5ff624";
+                const userID = "65e45dd6dba6a2185b189492";
+                await articleServices.publishArticle(articleID, userID);
+            } catch (err) {
+                expect(err.message).toBe("Article is published already");
+            }
+        });
+    });
+
+    describe("Un-publish article", () => {
+        it("should throw error if user is not the author of the article", async () => {
+            try {
+                const articleID = "65e44a2f701161ae7a5ff624";
+                const userID = "65e44a401b2d7b2678969fca";
+                await articleServices.unPublishArticle(articleID, userID);
+            } catch (err) {
+                expect(err.message).toBe("You cannot un-publish this article");
+            }
+        });
+        it("should throw error if article is already un-published", async () => {
+            try {
+                const articleID = "65e44a2f701161ae7a5ff624";
+                const userID = "65e45dd6dba6a2185b189492";
+                await articleServices.unPublishArticle(articleID, userID);
+            } catch (err) {
+                expect(err.message).toBe("Article has not been published yet");
             }
         });
     });
