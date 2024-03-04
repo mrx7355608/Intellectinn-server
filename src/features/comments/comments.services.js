@@ -1,10 +1,20 @@
 import { ApiError } from "../../utils/ApiError.js";
-import validator from "validator";
 import { filterUnwantedFields } from "../../utils/filterUnwantedFields.js";
+import { validateMongoID } from "../../utils/validateMongoId.js";
 import { commentValidator } from "./comments.validators.js";
 
 export function CommentsServices({ commentsDB, articlesDB }) {
     const listCommentByArticle = async (articleId) => {
+        // Validate articleId
+        validateMongoID(articleId, "article");
+
+        // Check if article exists
+        const article = await articlesDB.findById(articleId);
+        if (!article) {
+            throw new ApiError("Article not found", 404);
+        }
+
+        // Fetch  comments from database
         const comments = await commentsDB.findByArticleId(articleId);
         const populatedComments = await comments.populate(
             "author",
@@ -15,9 +25,7 @@ export function CommentsServices({ commentsDB, articlesDB }) {
 
     const addComment = async (articleId, userId, data) => {
         // Validate articleId
-        if (!validator.isMongoId(articleId)) {
-            throw new ApiError("Invalid article id", 400);
-        }
+        validateMongoID(article, "article");
 
         // Check if article exists
         const article = await articlesDB.findById(articleId);
@@ -43,9 +51,7 @@ export function CommentsServices({ commentsDB, articlesDB }) {
 
     const editComment = async (id, userId, changes) => {
         // Validate comment id
-        if (validator.isMongoId(id)) {
-            throw new ApiError("Invalid comment id", 400);
-        }
+        validateMongoID(id);
 
         // TODO: Validate new comment changes
 
@@ -71,9 +77,7 @@ export function CommentsServices({ commentsDB, articlesDB }) {
 
     const removeComment = async (id, userId) => {
         // Validate comment id
-        if (validator.isMongoId(id)) {
-            throw new ApiError("Invalid comment id", 400);
-        }
+        validateMongoID(id);
 
         // Check if comment exists
         const comment = await commentsDB.findById(id);
