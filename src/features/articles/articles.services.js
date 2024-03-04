@@ -1,7 +1,12 @@
 import slugify from "slugify";
 import { ApiError } from "../../utils/ApiError.js";
-import { categoryValidator, slugValidator } from "./article.validators.js";
+import {
+    articleValidator,
+    categoryValidator,
+    slugValidator,
+} from "./article.validators.js";
 import { validateMongoID } from "../../utils/validateMongoId.js";
+import { filterUnwantedFields } from "../../utils/filterUnwantedFields.js";
 
 export function ArticleServices({ articlesDB }) {
     const listAllArticles = async () => {
@@ -49,17 +54,31 @@ export function ArticleServices({ articlesDB }) {
         return populatedArticle;
     };
 
-    const addArticle = async (data) => {
+    const addArticle = async (data, userId) => {
         if (Object.keys(data).length < 1) {
             throw new ApiError("Article data is missing", 404);
         }
 
-        // TODO: validate article data
+        // Filter un-wanted fields
+        const allowedFields = [
+            "title",
+            "content",
+            "thumbnail",
+            "summary",
+            "category",
+            "timeToReadInMinutes",
+            "is_published",
+        ];
+        const filteredObject = filterUnwantedFields(data, allowedFields);
+
+        // Validate article data
+        articleValidator(filteredObject);
 
         // Create article data object
         const articleDataObject = {
             ...data,
             slug: slugify(data.title),
+            author: userId,
         };
         const newArticle = await articlesDB.insertData(articleDataObject);
         return newArticle;
