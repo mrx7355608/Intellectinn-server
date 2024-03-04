@@ -40,7 +40,8 @@ const getOneArticleBySlug = catchAsyncError(async (httpObject) => {
 
 const createArticle = catchAsyncError(async (httpObject) => {
     const data = httpObject.body;
-    const newArticle = await articleServices.addArticle(data);
+    const userId = String(httpObject.user._id);
+    const newArticle = await articleServices.addArticle(data, userId);
     return {
         status: 201,
         data: newArticle,

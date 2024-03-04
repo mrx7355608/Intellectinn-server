@@ -1,19 +1,43 @@
 import { ApiError } from "../../utils/ApiError.js";
 import validator from "validator";
+import { filterUnwantedFields } from "../../utils/filterUnwantedFields.js";
+import { commentValidator } from "./comments.validators.js";
 
-export function CommentsServices({ commentsDB }) {
+export function CommentsServices({ commentsDB, articlesDB }) {
     const listCommentByArticle = async (articleId) => {
         const comments = await commentsDB.findByArticleId(articleId);
         const populatedComments = await comments.populate(
             "author",
-            "profilePicture fullname",
+            "profilePicture fullname"
         );
         return populatedComments;
     };
 
-    const addComment = async (data) => {
-        // TODO: validate comment data
-        const newComment = await commentsDB.insertData(data);
+    const addComment = async (articleId, userId, data) => {
+        // Validate articleId
+        if (!validator.isMongoId(articleId)) {
+            throw new ApiError("Invalid article id", 400);
+        }
+
+        // Check if article exists
+        const article = await articlesDB.findById(articleId);
+        if (!article) {
+            throw new ApiError("Article not found", 404);
+        }
+
+        // Filter un-wanted fields
+        const filteredObject = filterUnwantedFields(data, ["text"]);
+
+        // Validate comment data
+        commentValidator(filteredObject);
+
+        const commentDataObject = {
+            ...filteredObject,
+            articleId: articleId,
+            author: userId,
+        };
+
+        const newComment = await commentsDB.insertData(commentDataObject);
         return newComment;
     };
 
@@ -40,7 +64,7 @@ export function CommentsServices({ commentsDB }) {
         const updatedComment = await commentsDB.udpateData(id, changes);
         const populatedUpdatedComment = await updatedComment.populate(
             "author",
-            "profilePicture fullname",
+            "profilePicture fullname"
         );
         return populatedUpdatedComment;
     };

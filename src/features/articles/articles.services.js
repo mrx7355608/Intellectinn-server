@@ -76,7 +76,7 @@ export function ArticleServices({ articlesDB }) {
 
         // Create article data object
         const articleDataObject = {
-            ...data,
+            ...filteredObject,
             slug: slugify(data.title),
             author: userId,
         };

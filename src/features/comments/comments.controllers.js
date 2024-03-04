@@ -1,8 +1,9 @@
 import { CommentsServices } from "./comments.services.js";
 import { commentsDB } from "./comments.data.js";
 import { catchAsyncError } from "../../utils/catchAsyncError.js";
+import { articlesDB } from "../articles/articles.data.js";
 
-const commentsServices = CommentsServices({ commentsDB });
+const commentsServices = CommentsServices({ commentsDB, articlesDB });
 
 const getAllCommentsOfArticle = catchAsyncError(async (httpObject) => {
     const { articleId } = httpObject.params;
@@ -16,7 +17,13 @@ const getAllCommentsOfArticle = catchAsyncError(async (httpObject) => {
 const createNewComment = catchAsyncError(async (httpObject) => {
     const { articleId } = httpObject.params;
     const data = httpObject.body;
-    const newComment = await commentsServices.addComment(articleId, data);
+    const userId = String(httpObject.user._id);
+
+    const newComment = await commentsServices.addComment(
+        articleId,
+        userId,
+        data
+    );
     return {
         status: 201,
         data: newComment,
@@ -30,7 +37,7 @@ const updateComment = catchAsyncError(async (httpObject) => {
     const updatedComment = await commentsServices.editComment(
         articleId,
         _id,
-        changes,
+        changes
     );
     return {
         status: 200,
