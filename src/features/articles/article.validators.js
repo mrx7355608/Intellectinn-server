@@ -1,5 +1,5 @@
 import joi from "joi";
-import { ApiError } from "../../utils/ApiError";
+import { ApiError } from "../../utils/ApiError.js";
 
 const slugValidationSchema = joi.string().required().min(5).max(30).messages({
     "string.empty": "Article slug cannot be empty",
@@ -8,49 +8,32 @@ const slugValidationSchema = joi.string().required().min(5).max(30).messages({
     "string.base": "Invalid article slug",
 });
 
-const allowedCategories = [
-    "Web development",
-    "Software development",
-    "Programming languages",
-    "Database",
-    "Game development",
-    "Workout",
-    "Philosophy",
-    "Psychology",
-    "Literature",
-    "Religion",
-];
-const categoryValidationSchema = joi
-    .string()
-    .required()
-    .valid(...allowedCategories)
-    .messages({
-        "string.empty": "Category cannot be empty",
-        "string.base": "Invalid category",
-        "any.only": "Unknown category",
-    });
+const categoryValidationSchema = joi.string().required().messages({
+    "string.empty": "Category cannot be empty",
+    "string.base": "Invalid category",
+    "any.required": "Category is required",
+});
 
 const articleValidationSchema = joi.object({
-    title: joi.string().required().min(10).max(80).messages({
+    title: joi.string().required().min(10).max(100).messages({
         "any.required": "Title is required",
         "string.empty": "Title cannot be empty",
         "string.base": "Title should be a text value",
         "string.min": "Title should be at least 10 characters",
-        "string.max": "Title cannot be longer than 80 characters",
+        "string.max": "Title cannot be longer than 100 characters",
     }),
-    summary: joi.string().required().min(100).max(250).messages({
+    summary: joi.string().required().min(100).max(500).messages({
         "any.required": "Summary is required",
         "string.empty": "Summary cannot be empty",
         "string.base": "Summary should be a text value",
         "string.min": "Summary should be at least 100 characters",
-        "string.max": "Summary cannot be longer than 250 characters",
+        "string.max": "Summary cannot be longer than 500 characters",
     }),
-    content: joi.string().required().min(500).max(3000).messages({
+    content: joi.string().required().min(500).messages({
         "any.required": "Article content is required",
         "string.empty": "Cannot create an empty article",
         "string.base": "Article content should be a text value",
         "string.min": "should be at least 500 characters",
-        "string.max": "cannot be longer than 3000 characters",
     }),
     thumbnail: joi.string().required().messages({
         "any.required": "Thumbnail is required",

@@ -17,14 +17,13 @@ export function setupSessions(app) {
     const cookieOptions = {
         secure: process.env.NODE_ENV === "production" ? true : false,
         httpOnly: true,
-        sameSite: "none",
         maxAge: 24 * 3600 * 1000,
     };
 
     app.use(
         sessions({
             secret: process.env.SESSIONS_SECRET,
-            proxy: true,
+            // proxy: true,
             resave: false,
             saveUninitialized: false,
             name: "side",
