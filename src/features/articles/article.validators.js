@@ -31,9 +31,9 @@ const articleValidationSchema = joi.object({
     }),
     content: joi.string().required().min(500).messages({
         "any.required": "Article content is required",
-        "string.empty": "Cannot create an empty article",
+        "string.empty": "Artilce content cannot be empty",
         "string.base": "Article content should be a text value",
-        "string.min": "should be at least 500 characters",
+        "string.min": "Article content should be at least 500 characters",
     }),
     thumbnail: joi.string().required().messages({
         "any.required": "Thumbnail is required",
