@@ -55,7 +55,7 @@ const updateArticle = catchAsyncError(async (httpObject) => {
     const newArticle = await articleServices.editArticle(
         articleId,
         userId,
-        changes
+        changes,
     );
     return {
         status: 201,
@@ -88,7 +88,7 @@ const unlikeArticle = catchAsyncError(async (httpObject) => {
     const userId = String(httpObject.user._id);
     const updatedArticle = await articleServices.unlikeArticle(
         articleId,
-        userId
+        userId,
     );
     return {
         status: 200,
@@ -101,7 +101,7 @@ const publishArticle = catchAsyncError(async (httpObject) => {
     const userId = String(httpObject.user._id);
     const updatedArticle = await articleServices.publishArticle(
         articleId,
-        userId
+        userId,
     );
     return {
         status: 200,
@@ -114,7 +114,7 @@ const unpublishArticle = catchAsyncError(async (httpObject) => {
     const userId = String(httpObject.user._id);
     const updatedArticle = await articleServices.unPublishArticle(
         articleId,
-        userId
+        userId,
     );
     return {
         status: 200,

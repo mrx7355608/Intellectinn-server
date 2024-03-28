@@ -40,7 +40,13 @@ const articleValidationSchema = joi.object({
         "string.empty": "Thumbnail cannot be empty",
         "string.base": "Invalid thumbnail",
     }),
-    category: categoryValidationSchema,
+    tags: joi.array().items(joi.string()).min(1).max(10).required().messages({
+        "any.required": "Tags are required",
+        "array.empty": "Please add at least 1 tag in your article",
+        "array.base": "Invalid tags",
+        "array.min": "Please add at least 1 tag in your article",
+        "array.max": "An article cannot have more than 10 tags",
+    }),
     timeToReadInMinutes: joi.number().required().min(2).max(30).messages({
         "any.required": "Article's reading time is required",
         "number.empty": "Article's reading time cannot be empty",

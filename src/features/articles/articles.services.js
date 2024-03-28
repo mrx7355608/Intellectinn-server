@@ -13,7 +13,7 @@ export function ArticleServices({ articlesDB }) {
         const articles = await articlesDB.findAll();
         const populatedArticles = await articles.populate(
             "author",
-            "fullname profilePicture"
+            "fullname profilePicture",
         );
         return populatedArticles;
     };
@@ -22,7 +22,7 @@ export function ArticleServices({ articlesDB }) {
         const articles = await articlesDB.findByFilter({ is_published: true });
         const populatedArticles = await articles.populate(
             "author",
-            "fullname profilePicture"
+            "fullname profilePicture",
         );
         return populatedArticles;
     };
@@ -32,7 +32,7 @@ export function ArticleServices({ articlesDB }) {
         const articles = await articlesDB.findByFilter({ category });
         const populatedArticles = await articles.populate(
             "author",
-            "fullname profilePicture"
+            "fullname profilePicture",
         );
         return populatedArticles;
     };
@@ -49,7 +49,7 @@ export function ArticleServices({ articlesDB }) {
 
         const populatedArticle = await article.populate(
             "author",
-            "fullname profilePicture"
+            "fullname profilePicture",
         );
         return populatedArticle;
     };
@@ -65,7 +65,7 @@ export function ArticleServices({ articlesDB }) {
             "content",
             "thumbnail",
             "summary",
-            "category",
+            "tags",
             "timeToReadInMinutes",
             "is_published",
         ];
