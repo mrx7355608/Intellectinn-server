@@ -6,6 +6,10 @@ const articleRouter = Router();
 
 articleRouter.use(isAuthenticated);
 articleRouter.get("/published", articleControllers.getPublishedArticles);
+articleRouter.get(
+    "/published/me",
+    articleControllers.getPublishedArticlesOfUser,
+);
 articleRouter.get("/:category", articleControllers.getArticlesByCategory);
 articleRouter.get("/:slug", articleControllers.getOneArticleBySlug);
 articleRouter.post("/", articleControllers.createArticle);

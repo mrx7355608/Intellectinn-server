@@ -5,7 +5,10 @@ const baseFunctions = BaseDataLayerFunctions(ArticleModel);
 
 // FIND BY FILTER
 async function findByFilter(filter) {
-    const articles = await ArticleModel.find(filter);
+    const articles = await ArticleModel.find(filter).populate(
+        "author",
+        "profilePicture fullname",
+    );
     return articles;
 }
 

@@ -27,6 +27,14 @@ export function ArticleServices({ articlesDB }) {
         return populatedArticles;
     };
 
+    const listPublishedArticlesOfUser = async (userID) => {
+        const articles = await articlesDB.findByFilter({
+            is_published: true,
+            author: userID,
+        });
+        return articles;
+    };
+
     const listArticlesByCategory = async (category) => {
         categoryValidator(category);
         const articles = await articlesDB.findByFilter({ category });
@@ -206,5 +214,6 @@ export function ArticleServices({ articlesDB }) {
         listPublishedArticles,
         listArticlesByCategory,
         verifyArticleUtil,
+        listPublishedArticlesOfUser,
     };
 }

@@ -20,6 +20,15 @@ const getPublishedArticles = catchAsyncError(async () => {
     };
 });
 
+const getPublishedArticlesOfUser = catchAsyncError(async (httpObject) => {
+    const userID = String(httpObject.user._id);
+    const articles = await articleServices.listPublishedArticlesOfUser(userID);
+    return {
+        status: 200,
+        data: articles,
+    };
+});
+
 const getArticlesByCategory = catchAsyncError(async (httpObject) => {
     const { category } = httpObject.params;
     const articles = await articleServices.listArticlesByCategory(category);
@@ -127,6 +136,7 @@ export const articleControllers = {
     getPublishedArticles,
     getArticlesByCategory,
     getOneArticleBySlug,
+    getPublishedArticlesOfUser,
     createArticle,
     updateArticle,
     deleteArticle,
