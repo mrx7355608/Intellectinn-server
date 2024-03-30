@@ -9,6 +9,12 @@ export function UserServices({ usersDB }) {
         return user;
     };
 
+    const searchUsers = async (fullname) => {
+        // TODO: validate and escape fullname
+        const users = await usersDB.findUsersByRegex(fullname);
+        return users;
+    };
+
     // FOLLOW USER
     const followUser = async (userToFollowID, me) => {
         validateMongoID(userToFollowID, "user");
@@ -25,7 +31,7 @@ export function UserServices({ usersDB }) {
 
         const updatedUser = await usersDB.insertInFollowing(
             me._id,
-            userToFollowID
+            userToFollowID,
         );
         await usersDB.insertInFollowers(userToFollowID, me._id);
 
@@ -43,7 +49,7 @@ export function UserServices({ usersDB }) {
         // If yes, then unfollow user
         const updatedUser = await usersDB.removeFromFollowing(
             me._id,
-            unfollowUserID
+            unfollowUserID,
         );
         return updatedUser.following;
     };
@@ -62,7 +68,7 @@ export function UserServices({ usersDB }) {
         // Update user
         const updatedUser = await usersDB.updateUser(
             userId,
-            filteredChangesObject
+            filteredChangesObject,
         );
         return updatedUser;
     };
@@ -91,5 +97,13 @@ export function UserServices({ usersDB }) {
 
         return user;
     };
-    return { followUser, unfollowUser, editUser, removeUser, listUserProfile };
+
+    return {
+        searchUsers,
+        followUser,
+        unfollowUser,
+        editUser,
+        removeUser,
+        listUserProfile,
+    };
 }

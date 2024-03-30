@@ -3,6 +3,15 @@ import { BaseDataLayerFunctions } from "../../utils/BaseDataLayerFunctions.js";
 
 const baseFunctions = BaseDataLayerFunctions(UserModel);
 
+// FIND BY REGEX
+async function findUsersByRegex(fullname) {
+    const user = await UserModel.find(
+        { fullname: { $regex: new RegExp(fullname), $options: "i" } },
+        "about fullname profilePicture",
+    );
+    return user;
+}
+
 // FIND BY EMAIL
 async function findUserByEmail(email) {
     const user = await UserModel.findOne({ email }, "-password -__v");
@@ -67,4 +76,5 @@ export const usersDB = {
     insertInFollowing,
     removeFromFollowers,
     removeFromFollowing,
+    findUsersByRegex,
 };

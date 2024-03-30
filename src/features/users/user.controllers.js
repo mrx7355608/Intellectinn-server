@@ -4,6 +4,15 @@ import { catchAsyncError } from "../../utils/catchAsyncError.js";
 
 const userServices = UserServices({ usersDB });
 
+const searchUsers = catchAsyncError(async (httpObject) => {
+    const fullname = httpObject.query.user;
+    const users = await userServices.searchUsers(fullname);
+    return {
+        status: 200,
+        data: users,
+    };
+});
+
 const followUser = catchAsyncError(async (httpObject) => {
     const user = httpObject.user;
     const { followingID } = httpObject.params;
@@ -19,7 +28,7 @@ const unfollowUser = catchAsyncError(async (httpObject) => {
     const { followingID } = httpObject.params;
     const updatedFollowings = await userServices.unfollowUser(
         followingID,
-        user
+        user,
     );
     return {
         status: 200,
@@ -77,4 +86,5 @@ export const userControllers = {
     deleteUser,
     getUserProfile,
     getLoggedInUser,
+    searchUsers
 };

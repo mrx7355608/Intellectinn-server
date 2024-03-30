@@ -9,6 +9,39 @@ import { validateMongoID } from "../../utils/validateMongoId.js";
 import { filterUnwantedFields } from "../../utils/filterUnwantedFields.js";
 
 export function ArticleServices({ articlesDB }) {
+    const searchTags = async (query) => {
+        const articles = await articlesDB.findByFilter(
+            {
+                tags: {
+                    $regex: new RegExp(query),
+                    $options: "i",
+                },
+            },
+            "tags",
+        );
+        const tagsList = [];
+        articles.forEach((a) => {
+            tagsList.push(...a.tags);
+        });
+
+        const tags = Array.from(new Set(tagsList));
+        return tags;
+    };
+    const searchArticles = async (query) => {
+        const regexMongooseQueryObject = {
+            $regex: new RegExp(query),
+            $options: "i",
+        };
+
+        const articles = await articlesDB.findByFilter({
+            $or: [
+                { title: regexMongooseQueryObject },
+                { summary: regexMongooseQueryObject },
+                { tags: regexMongooseQueryObject },
+            ],
+        });
+        return articles;
+    };
     const listAllArticles = async () => {
         const articles = await articlesDB.findAll();
         const populatedArticles = await articles.populate(
@@ -215,5 +248,7 @@ export function ArticleServices({ articlesDB }) {
         listArticlesByCategory,
         verifyArticleUtil,
         listPublishedArticlesOfUser,
+        searchArticles,
+        searchTags,
     };
 }

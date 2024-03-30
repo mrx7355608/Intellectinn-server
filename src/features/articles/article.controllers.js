@@ -4,6 +4,24 @@ import { catchAsyncError } from "../../utils/catchAsyncError.js";
 
 const articleServices = ArticleServices({ articlesDB });
 
+const searchTags = catchAsyncError(async (httpObject) => {
+    const query = httpObject.query.tags;
+    const tags = await articleServices.searchTags(query);
+    return {
+        status: 200,
+        data: tags,
+    };
+});
+
+const searchArticles = catchAsyncError(async (httpObject) => {
+    const query = httpObject.query.articles;
+    const articles = await articleServices.searchArticles(query);
+    return {
+        status: 200,
+        data: articles,
+    };
+});
+
 const getAllArticles = catchAsyncError(async () => {
     const articles = await articleServices.listAllArticles();
     return {
@@ -132,6 +150,8 @@ const unpublishArticle = catchAsyncError(async (httpObject) => {
 });
 
 export const articleControllers = {
+    searchArticles,
+    searchTags,
     getAllArticles,
     getPublishedArticles,
     getArticlesByCategory,

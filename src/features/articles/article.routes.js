@@ -4,6 +4,9 @@ import { articleControllers } from "./article.controllers.js";
 
 const articleRouter = Router();
 
+articleRouter.get("/search", articleControllers.searchArticles);
+articleRouter.get("/search/tags", articleControllers.searchTags);
+
 articleRouter.use(isAuthenticated);
 articleRouter.get("/published", articleControllers.getPublishedArticles);
 articleRouter.get(

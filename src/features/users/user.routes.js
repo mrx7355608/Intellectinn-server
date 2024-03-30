@@ -5,6 +5,7 @@ import { isAuthenticated } from "../../middlewares/isAuthenticated.js";
 const userRouter = Router();
 
 userRouter.get("/profile/:userID", userControllers.getUserProfile);
+userRouter.get("/search", userControllers.searchUsers);
 
 userRouter.use(isAuthenticated);
 userRouter.get("/me", userControllers.getLoggedInUser);
