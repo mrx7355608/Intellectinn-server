@@ -8,6 +8,7 @@ import { authRouter } from "./features/auth/auth.routes.js";
 import { userRouter } from "./features/users/user.routes.js";
 import { articleRouter } from "./features/articles/article.routes.js";
 import { commentsRouter } from "./features/comments/comments.routes.js";
+import { searchRouter } from "./features/search/search.routes.js";
 
 export function createAndSetupApp() {
     const app = express();
@@ -22,6 +23,7 @@ export function createAndSetupApp() {
     app.use("/api/users", userRouter);
     app.use("/api/articles", articleRouter);
     app.use("/api/comments", commentsRouter);
+    app.use("/api/search", searchRouter);
 
     // ERROR HANDLERS
     app.use(catch404);
