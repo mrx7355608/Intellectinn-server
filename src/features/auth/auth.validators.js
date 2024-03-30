@@ -2,11 +2,11 @@ import joi from "joi";
 import { ApiError } from "../../utils/ApiError.js";
 
 const signupValidationSchema = joi.object({
-    fullname: joi.string().min(8).max(15).required().messages({
+    fullname: joi.string().min(8).max(50).required().messages({
         "any.required": "Full name is required",
         "string.empty": "Full name cannot be empty",
         "string.min": "Full name should be 8 characters long at least",
-        "string.max": "Full name cannot be longer than 15 characters",
+        "string.max": "Full name cannot be longer than 50 characters",
         "string.base": "Full name should be a text value",
     }),
 

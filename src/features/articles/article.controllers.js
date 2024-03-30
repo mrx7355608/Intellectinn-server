@@ -30,8 +30,9 @@ const getAllArticles = catchAsyncError(async () => {
     };
 });
 
-const getPublishedArticles = catchAsyncError(async () => {
-    const articles = await articleServices.listPublishedArticles();
+const getPublishedArticles = catchAsyncError(async (httpObject) => {
+    const tag = httpObject.query.tag;
+    const articles = await articleServices.listPublishedArticles(tag);
     return {
         status: 200,
         data: articles,

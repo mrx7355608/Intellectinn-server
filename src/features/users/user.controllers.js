@@ -86,5 +86,5 @@ export const userControllers = {
     deleteUser,
     getUserProfile,
     getLoggedInUser,
-    searchUsers
+    searchUsers,
 };

@@ -51,13 +51,22 @@ export function ArticleServices({ articlesDB }) {
         return populatedArticles;
     };
 
-    const listPublishedArticles = async () => {
-        const articles = await articlesDB.findByFilter({ is_published: true });
-        const populatedArticles = await articles.populate(
-            "author",
-            "fullname profilePicture",
-        );
-        return populatedArticles;
+    const listPublishedArticles = async (tag) => {
+        let articles;
+        if (tag) {
+            articles = await articlesDB.findByFilter({
+                is_published: true,
+                tags: {
+                    $regex: new RegExp(tag),
+                    $options: "i",
+                },
+            });
+        } else {
+            articles = await articlesDB.findByFilter({
+                is_published: true,
+            });
+        }
+        return articles;
     };
 
     const listPublishedArticlesOfUser = async (userID) => {
