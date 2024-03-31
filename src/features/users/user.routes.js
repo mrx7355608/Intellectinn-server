@@ -8,9 +8,14 @@ userRouter.get("/profile/:userID", userControllers.getUserProfile);
 userRouter.get("/search", userControllers.searchUsers);
 
 userRouter.use(isAuthenticated);
-userRouter.get("/me", userControllers.getLoggedInUser);
-userRouter.patch("/update-account", userControllers.editUser);
-userRouter.delete("/delete-account", userControllers.deleteUser);
+userRouter
+    .route("/me")
+    .get(userControllers.getLoggedInUser)
+    .patch(userControllers.editUser)
+    .delete(userControllers.deleteUser);
+userRouter.get("/me/following");
+userRouter.get("/me/followers");
+
 userRouter.patch("/follow/:followingID", userControllers.followUser);
 userRouter.patch("/unfollow/:followingID", userControllers.unfollowUser);
 

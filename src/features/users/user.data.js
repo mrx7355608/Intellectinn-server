@@ -19,11 +19,11 @@ async function findUserByEmail(email) {
 }
 
 // INSERT IN FOLLOWING
-async function insertInFollowing(followerID, followingID) {
+async function insertInFollowing(myID, myFollowerID) {
     const updatedUser = await UserModel.findByIdAndUpdate(
-        followerID,
+        myID,
         {
-            $push: { following: followingID },
+            $push: { following: myFollowerID },
         },
         { new: true },
     );
@@ -31,11 +31,11 @@ async function insertInFollowing(followerID, followingID) {
 }
 
 // INSERT IN FOLLOWERS
-async function insertInFollowers(followerID, followingID) {
+async function insertInFollowers(myID, myFollowerID) {
     const updatedUser = await UserModel.findByIdAndUpdate(
-        followingID,
+        myFollowerID,
         {
-            $push: { followers: followerID },
+            $push: { followers: myID },
         },
         { new: true },
     );

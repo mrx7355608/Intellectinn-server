@@ -29,13 +29,13 @@ export function UserServices({ usersDB }) {
             throw new ApiError("You are already following this user", 400);
         }
 
-        const updatedUser = await usersDB.insertInFollowing(
+        const updatedMe = await usersDB.insertInFollowing(
             me._id,
             userToFollowID,
         );
-        await usersDB.insertInFollowers(userToFollowID, me._id);
+        await usersDB.insertInFollowers(me._id, userToFollowID);
 
-        return updatedUser.following;
+        return updatedMe.following;
     };
 
     // UN-FOLLOW USER
@@ -95,7 +95,12 @@ export function UserServices({ usersDB }) {
         user.email = undefined;
         user.googleId = undefined;
 
-        return user;
+        const populatedUser = await user.populate(
+            "followers following",
+            "profilePicture fullname",
+        );
+
+        return populatedUser;
     };
 
     return {
