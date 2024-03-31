@@ -6,9 +6,9 @@ const articleRouter = Router();
 
 articleRouter.get("/search", articleControllers.searchArticles);
 articleRouter.get("/search/tags", articleControllers.searchTags);
+articleRouter.get("/published", articleControllers.getPublishedArticles);
 
 articleRouter.use(isAuthenticated);
-articleRouter.get("/published", articleControllers.getPublishedArticles);
 articleRouter.get(
     "/published/me",
     articleControllers.getPublishedArticlesOfUser,
