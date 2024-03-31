@@ -64,6 +64,24 @@ const getUserProfile = catchAsyncError(async (httpObject) => {
     };
 });
 
+const getUserFollowings = catchAsyncError(async (httpObject) => {
+    const userID = httpObject.params.userID;
+    const following = await userServices.listUserFollowing(userID);
+    return {
+        status: 200,
+        data: following,
+    };
+});
+
+const getUserFollowers = catchAsyncError(async (httpObject) => {
+    const userID = httpObject.params.userID;
+    const followers = await userServices.listUserFollowers(userID);
+    return {
+        status: 200,
+        data: followers,
+    };
+});
+
 const getLoggedInUser = catchAsyncError(async (httpObject) => {
     const { user } = httpObject;
 
@@ -87,4 +105,6 @@ export const userControllers = {
     getUserProfile,
     getLoggedInUser,
     searchUsers,
+    getUserFollowers,
+    getUserFollowings,
 };

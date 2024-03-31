@@ -80,6 +80,50 @@ export function UserServices({ usersDB }) {
         return null;
     };
 
+    const listUserFollowing = async (id) => {
+        validateMongoID(id, "user");
+        const user = await _userExists(id);
+        if (!user) {
+            throw new ApiError("User not found", 404);
+        }
+
+        // Remove sensitive fields
+        user.__v = undefined;
+        user.updatedAt = undefined;
+        user.password = undefined;
+        user.email = undefined;
+        user.googleId = undefined;
+
+        const populatedUser = await user.populate(
+            "following",
+            "profilePicture fullname",
+        );
+
+        return populatedUser.following;
+    };
+
+    const listUserFollowers = async (id) => {
+        validateMongoID(id, "user");
+        const user = await _userExists(id);
+        if (!user) {
+            throw new ApiError("User not found", 404);
+        }
+
+        // Remove sensitive fields
+        user.__v = undefined;
+        user.updatedAt = undefined;
+        user.password = undefined;
+        user.email = undefined;
+        user.googleId = undefined;
+
+        const populatedUser = await user.populate(
+            "followers",
+            "profilePicture fullname",
+        );
+
+        return populatedUser.followers;
+    };
+
     // GET PROFILE OF A USER
     const listUserProfile = async (id) => {
         validateMongoID(id, "user");
@@ -110,5 +154,7 @@ export function UserServices({ usersDB }) {
         editUser,
         removeUser,
         listUserProfile,
+        listUserFollowers,
+        listUserFollowing,
     };
 }
