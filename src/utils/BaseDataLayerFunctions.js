@@ -15,11 +15,9 @@ export function BaseDataLayerFunctions(model) {
     };
 
     const updateData = async (id, changes) => {
-        const updatedModelData = await this._model.findByIdAndUpdate(
-            id,
-            changes,
-            { new: true },
-        );
+        const updatedModelData = await model.findByIdAndUpdate(id, changes, {
+            new: true,
+        });
         return updatedModelData;
     };
 
