@@ -9,7 +9,7 @@ const userSchema = new Schema(
         googleId: { type: String, default: null },
         profilePicture: {
             type: String,
-            default: process.env.DEFAULT_PROFILE_PICTURE,
+            default: "https://res.cloudinary.com/doemiclic/image/upload/v1693055588/default_user_eqn3vt.png"
         },
         about: { type: String, default: "" },
         followers: {
