@@ -7,6 +7,7 @@ const articleRouter = Router();
 articleRouter.get("/search", articleControllers.searchArticles);
 articleRouter.get("/search/tags", articleControllers.searchTags);
 articleRouter.get("/published", articleControllers.getPublishedArticles);
+articleRouter.get("/:slug", articleControllers.getOneArticleBySlug);
 
 articleRouter.use(isAuthenticated);
 articleRouter.get(
@@ -14,7 +15,6 @@ articleRouter.get(
     articleControllers.getPublishedArticlesOfUser,
 );
 articleRouter.get("/:category", articleControllers.getArticlesByCategory);
-articleRouter.get("/:slug", articleControllers.getOneArticleBySlug);
 articleRouter.post("/", articleControllers.createArticle);
 articleRouter.patch("/:articleId", articleControllers.updateArticle);
 articleRouter.delete("/:articleId", articleControllers.deleteArticle);

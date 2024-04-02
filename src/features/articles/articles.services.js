@@ -89,7 +89,7 @@ export function ArticleServices({ articlesDB }) {
 
     const listOneArticleBySlug = async (slug) => {
         // Validate slug
-        slugValidator(slug);
+        // slugValidator(slug);
 
         // Get article from db
         const article = await articlesDB.findOneBySlug(slug);
