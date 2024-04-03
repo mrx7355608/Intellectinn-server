@@ -43,9 +43,9 @@ async function insertInFollowers(myID, myFollowerID) {
 }
 
 // REMOVE FROM FOLLOWING
-async function removeFromFollowing(followerID, followingID) {
+async function removeFromFollowing(myID, followingID) {
     const updatedUser = await UserModel.findByIdAndUpdate(
-        followerID,
+        myID,
         {
             $pull: { following: followingID },
         },
@@ -55,11 +55,11 @@ async function removeFromFollowing(followerID, followingID) {
 }
 
 // REMOVE FROM FOLLOWERS
-async function removeFromFollowers(followerID, followingID) {
+async function removeFromFollowers(myID, followingID) {
     const updatedUser = await UserModel.findByIdAndUpdate(
         followingID,
         {
-            $pull: { followers: followerID },
+            $pull: { followers: myID },
         },
         { new: true },
     );

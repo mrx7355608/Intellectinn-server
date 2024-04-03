@@ -4,6 +4,6 @@ export function isAuthenticated(req, res, next) {
     }
     return res.status(401).json({
         ok: false,
-        error: "Not authenticated",
+        error: "Please login to continue",
     });
 }

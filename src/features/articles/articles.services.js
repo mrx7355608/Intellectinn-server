@@ -151,7 +151,7 @@ export function ArticleServices({ articlesDB }) {
         const article = await verifyArticleUtil(id);
 
         // Check if user is the author
-        if (article.author !== userId) {
+        if (String(article.author) !== userId) {
             throw new ApiError("You cannot delete this article", 403);
         }
 

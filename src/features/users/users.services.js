@@ -51,6 +51,8 @@ export function UserServices({ usersDB }) {
             me._id,
             unfollowUserID,
         );
+        await usersDB.removeFromFollowers(me._id, unfollowUserID);
+
         return updatedUser.following;
     };
 
