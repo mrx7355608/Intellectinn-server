@@ -19,10 +19,15 @@ export function UserServices({ usersDB }) {
     const followUser = async (userToFollowID, me) => {
         validateMongoID(userToFollowID, "user");
 
+        // Check if user is trying to follow himself
+        if (userToFollowID === String(me._id)) {
+            throw new ApiError("You cannot follow yourself", 403);
+        }
+
         // Check if user exists
         const userToFollow = await _userExists(userToFollowID);
         if (!userToFollow) {
-            throw new ApiError("User does not exist");
+            throw new ApiError("User does not exist", 404);
         }
 
         if (me.following.includes(userToFollowID)) {
@@ -41,7 +46,19 @@ export function UserServices({ usersDB }) {
     // UN-FOLLOW USER
     const unfollowUser = async (unfollowUserID, me) => {
         validateMongoID(unfollowUserID, "user");
-        // Check if user is following him
+
+        // Check if user is trying to unfollow himself
+        if (unfollowUserID === String(me._id)) {
+            throw new ApiError("You cannot unfollow yourself", 403);
+        }
+
+        // Check if user still exists
+        const userToFollow = await _userExists(unfollowUserID);
+        if (!userToFollow) {
+            throw new ApiError("User does not exist", 404);
+        }
+
+        // Check if user is already following him
         if (me.following.includes(unfollowUserID) === false) {
             throw new ApiError("You are not following this user", 400);
         }
