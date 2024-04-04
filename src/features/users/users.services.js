@@ -115,7 +115,7 @@ export function UserServices({ usersDB }) {
 
         const populatedUser = await user.populate(
             "following",
-            "profilePicture fullname",
+            "about profilePicture fullname",
         );
 
         return populatedUser.following;
@@ -137,7 +137,7 @@ export function UserServices({ usersDB }) {
 
         const populatedUser = await user.populate(
             "followers",
-            "profilePicture fullname",
+            "about profilePicture fullname",
         );
 
         return populatedUser.followers;

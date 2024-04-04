@@ -40,7 +40,7 @@ const getPublishedArticles = catchAsyncError(async (httpObject) => {
 });
 
 const getPublishedArticlesOfUser = catchAsyncError(async (httpObject) => {
-    const userID = String(httpObject.user._id);
+    const { userID } = httpObject.params;
     const articles = await articleServices.listPublishedArticlesOfUser(userID);
     return {
         status: 200,
