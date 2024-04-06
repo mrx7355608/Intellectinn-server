@@ -12,11 +12,8 @@ userRouter.get("/following/:userID", userControllers.getUserFollowings);
 userRouter.use(isAuthenticated);
 userRouter
     .route("/me")
-    .get(userControllers.getLoggedInUser)
     .patch(userControllers.editUser)
     .delete(userControllers.deleteUser);
-userRouter.get("/me/following");
-userRouter.get("/me/followers");
 
 userRouter.patch("/follow/:followingID", userControllers.followUser);
 userRouter.patch("/unfollow/:followingID", userControllers.unfollowUser);
