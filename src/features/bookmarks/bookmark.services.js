@@ -18,11 +18,11 @@ export function BookmarkServices({ articlesDB }) {
         }
 
         // Bookmark article
-        const bookmarksList = await articlesDB.insertInBookmarks(
+        const updatedArticle = await articlesDB.insertInBookmarks(
             articleID,
             me.id
         );
-        return bookmarksList;
+        return updatedArticle.bookmarkedBy;
     };
 
     const removeBookmark = async (articleID, me) => {
@@ -41,11 +41,11 @@ export function BookmarkServices({ articlesDB }) {
         }
 
         // Bookmark article
-        const bookmarksList = await articlesDB.removeFromBookmarks(
+        const updatedArticle = await articlesDB.removeFromBookmarks(
             articleID,
             me.id
         );
-        return bookmarksList;
+        return updatedArticle.bookmarkedBy;
     };
 
     const listBookmarkedArticles = async (userID) => {
