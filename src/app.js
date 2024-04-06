@@ -4,10 +4,10 @@ import { setupSessions } from "./loaders/setupSessions.js";
 import { setupPassport } from "./loaders/setupPassport.js";
 import { catch404, errorHandler } from "./utils/errorHandler.js";
 
-import { authRouter } from "./features/auth/auth.routes.js";
-import { userRouter } from "./features/users/user.routes.js";
-import { articleRouter } from "./features/articles/article.routes.js";
-import { commentsRouter } from "./features/comments/comments.routes.js";
+import { authRouter } from "./features/auth/auth.router.js";
+import { userRouter } from "./features/users/user.router.js";
+import { articleRouter } from "./features/articles/article.router.js";
+import { commentsRouter } from "./features/comments/comments.router.js";
 import { bookmarkRouter } from "./features/bookmarks/bookmark.router.js";
 
 export function createAndSetupApp() {
