@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 
-export async function connectDB() {
-    const dbURL = process.env.DB_URL;
+export async function connectDB(dbURL) {
     await mongoose.connect(dbURL);
     console.log("New database connection established");
 }

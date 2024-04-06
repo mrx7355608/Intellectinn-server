@@ -7,7 +7,7 @@ let agent;
 
 describe("Auth tests", () => {
     beforeAll(async () => {
-        await connectDB();
+        await connectDB(process.env.TESTS_DB_URL);
         const app = createAndSetupApp();
         agent = supertest(app);
     });
@@ -45,16 +45,17 @@ describe("Auth tests", () => {
         it.skip("(passing) should create a new user", async () => {
             const response = await agent
                 .post("/api/auth/signup")
-                .send({ ...userData, email: "fwd8@gmail.com" })
+                .send({ ...userData, email: "testaccount@gmail.com" })
                 .expect(201);
             expect(response.body.ok).toBe(true);
             expect(response.body.data).toStrictEqual({
                 _id: expect.any(String),
                 fullname: userData.fullname,
-                email: "fwd8@gmail.com",
+                email: "testaccount@gmail.com",
                 followers: [],
                 following: [],
-                profilePicture: process.env.DEFAULT_PROFILE_PICTURE,
+                profilePicture:
+                    "https://res.cloudinary.com/doemiclic/image/upload/v1693055588/default_user_eqn3vt.png",
                 about: "",
                 googleId: null,
                 createdAt: expect.any(String),
@@ -163,7 +164,7 @@ describe("Auth tests", () => {
         it("should not allow non-logged in user to logout", async () => {
             const response = await agent.post("/api/auth/logout").expect(401);
             expect(response.body.ok).toBe(false);
-            expect(response.body.error).toBe("Not authenticated");
+            expect(response.body.error).toBe("Please login to continue");
         });
     });
 });

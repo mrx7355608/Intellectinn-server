@@ -36,7 +36,7 @@ export function UserServices({ usersDB }) {
 
         const updatedMe = await usersDB.insertInFollowing(
             me._id,
-            userToFollowID,
+            userToFollowID
         );
         await usersDB.insertInFollowers(me._id, userToFollowID);
 
@@ -66,7 +66,7 @@ export function UserServices({ usersDB }) {
         // If yes, then unfollow user
         const updatedUser = await usersDB.removeFromFollowing(
             me._id,
-            unfollowUserID,
+            unfollowUserID
         );
         await usersDB.removeFromFollowers(me._id, unfollowUserID);
 
@@ -87,7 +87,7 @@ export function UserServices({ usersDB }) {
         // Update user
         const updatedUser = await usersDB.updateUser(
             userId,
-            filteredChangesObject,
+            filteredChangesObject
         );
         return updatedUser;
     };
@@ -115,7 +115,7 @@ export function UserServices({ usersDB }) {
 
         const populatedUser = await user.populate(
             "following",
-            "about profilePicture fullname",
+            "about profilePicture fullname"
         );
 
         return populatedUser.following;
@@ -137,7 +137,7 @@ export function UserServices({ usersDB }) {
 
         const populatedUser = await user.populate(
             "followers",
-            "about profilePicture fullname",
+            "about profilePicture fullname"
         );
 
         return populatedUser.followers;
@@ -158,12 +158,7 @@ export function UserServices({ usersDB }) {
         user.email = undefined;
         user.googleId = undefined;
 
-        const populatedUser = await user.populate(
-            "followers following",
-            "profilePicture fullname",
-        );
-
-        return populatedUser;
+        return user;
     };
 
     return {
