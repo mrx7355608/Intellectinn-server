@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { bookmarkControllers } from "./bookmark.controllers";
+import { bookmarkControllers } from "./bookmark.controllers.js";
 
 export const bookmarkRouter = Router();
 

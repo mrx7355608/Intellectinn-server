@@ -1,5 +1,5 @@
-import { ApiError } from "../../utils/ApiError";
-import { validateMongoID } from "../../utils/validateMongoId";
+import { ApiError } from "../../utils/ApiError.js";
+import { validateMongoID } from "../../utils/validateMongoId.js";
 
 export function BookmarkServices({ articlesDB }) {
     const addBookmark = async (articleID, me) => {
