@@ -9,16 +9,14 @@ articleRouter.get("/search/tags", articleControllers.searchTags);
 articleRouter.get("/published", articleControllers.getPublishedArticles);
 articleRouter.get(
     "/published/:userID",
-    articleControllers.getPublishedArticlesOfUser,
+    articleControllers.getPublishedArticlesOfUser
 );
 articleRouter.get("/:slug", articleControllers.getOneArticleBySlug);
+articleRouter.get("/:tag", articleControllers.getArticlesByTag);
 
+// Auth middleware
 articleRouter.use(isAuthenticated);
-// articleRouter.get(
-//     "/published/me",
-//     articleControllers.getPublishedArticlesOfUser,
-// );
-articleRouter.get("/:category", articleControllers.getArticlesByCategory);
+
 articleRouter.post("/", articleControllers.createArticle);
 articleRouter.patch("/:articleId", articleControllers.updateArticle);
 articleRouter.delete("/:articleId", articleControllers.deleteArticle);

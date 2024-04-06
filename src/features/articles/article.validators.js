@@ -1,17 +1,11 @@
 import joi from "joi";
 import { ApiError } from "../../utils/ApiError.js";
 
-const slugValidationSchema = joi.string().required().min(5).max(30).messages({
+const slugValidationSchema = joi.string().required().min(5).max(500).messages({
     "string.empty": "Article slug cannot be empty",
     "string.min": "Article slug should be 5 characters long at least",
-    "string.max": "Article slug cannot be longer than 30 characters",
+    "string.max": "Article slug cannot be longer than 500 characters",
     "string.base": "Invalid article slug",
-});
-
-const categoryValidationSchema = joi.string().required().messages({
-    "string.empty": "Category cannot be empty",
-    "string.base": "Invalid category",
-    "any.required": "Category is required",
 });
 
 const articleValidationSchema = joi.object({
@@ -63,13 +57,6 @@ const articleValidationSchema = joi.object({
 
 export function articleValidator(category) {
     const { error } = articleValidationSchema.validate(category);
-    if (error) {
-        throw new ApiError(error.message, 400);
-    }
-}
-
-export function categoryValidator(category) {
-    const { error } = categoryValidationSchema.validate(category);
     if (error) {
         throw new ApiError(error.message, 400);
     }

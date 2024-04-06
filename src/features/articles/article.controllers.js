@@ -48,9 +48,9 @@ const getPublishedArticlesOfUser = catchAsyncError(async (httpObject) => {
     };
 });
 
-const getArticlesByCategory = catchAsyncError(async (httpObject) => {
-    const { category } = httpObject.params;
-    const articles = await articleServices.listArticlesByCategory(category);
+const getArticlesByTag = catchAsyncError(async (httpObject) => {
+    const { tag } = httpObject.params;
+    const articles = await articleServices.listArticlesByCategory(tag);
     return {
         status: 200,
         data: articles,
@@ -83,7 +83,7 @@ const updateArticle = catchAsyncError(async (httpObject) => {
     const newArticle = await articleServices.editArticle(
         articleId,
         userId,
-        changes,
+        changes
     );
     return {
         status: 201,
@@ -116,7 +116,7 @@ const unlikeArticle = catchAsyncError(async (httpObject) => {
     const userId = String(httpObject.user._id);
     const updatedArticle = await articleServices.unlikeArticle(
         articleId,
-        userId,
+        userId
     );
     return {
         status: 200,
@@ -129,7 +129,7 @@ const publishArticle = catchAsyncError(async (httpObject) => {
     const userId = String(httpObject.user._id);
     const updatedArticle = await articleServices.publishArticle(
         articleId,
-        userId,
+        userId
     );
     return {
         status: 200,
@@ -142,7 +142,7 @@ const unpublishArticle = catchAsyncError(async (httpObject) => {
     const userId = String(httpObject.user._id);
     const updatedArticle = await articleServices.unPublishArticle(
         articleId,
-        userId,
+        userId
     );
     return {
         status: 200,
@@ -155,7 +155,7 @@ export const articleControllers = {
     searchTags,
     getAllArticles,
     getPublishedArticles,
-    getArticlesByCategory,
+    getArticlesByTag,
     getOneArticleBySlug,
     getPublishedArticlesOfUser,
     createArticle,

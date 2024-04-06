@@ -1,10 +1,6 @@
 import slugify from "slugify";
 import { ApiError } from "../../utils/ApiError.js";
-import {
-    articleValidator,
-    categoryValidator,
-    slugValidator,
-} from "./article.validators.js";
+import { articleValidator, slugValidator } from "./article.validators.js";
 import { validateMongoID } from "../../utils/validateMongoId.js";
 import { filterUnwantedFields } from "../../utils/filterUnwantedFields.js";
 
@@ -17,7 +13,7 @@ export function ArticleServices({ articlesDB }) {
                     $options: "i",
                 },
             },
-            "tags",
+            "tags"
         );
         const tagsList = [];
         articles.forEach((a) => {
@@ -41,14 +37,6 @@ export function ArticleServices({ articlesDB }) {
             ],
         });
         return articles;
-    };
-    const listAllArticles = async () => {
-        const articles = await articlesDB.findAll();
-        const populatedArticles = await articles.populate(
-            "author",
-            "fullname profilePicture",
-        );
-        return populatedArticles;
     };
 
     const listPublishedArticles = async (tag) => {
@@ -77,19 +65,21 @@ export function ArticleServices({ articlesDB }) {
         return articles;
     };
 
-    const listArticlesByCategory = async (category) => {
-        categoryValidator(category);
-        const articles = await articlesDB.findByFilter({ category });
+    const listArticlesByTag = async (tag) => {
+        const articles = await articlesDB.findByFilter({
+            tag,
+            is_published: true,
+        });
         const populatedArticles = await articles.populate(
             "author",
-            "fullname profilePicture",
+            "fullname profilePicture"
         );
         return populatedArticles;
     };
 
     const listOneArticleBySlug = async (slug) => {
         // Validate slug
-        // slugValidator(slug);
+        slugValidator(slug);
 
         // Get article from db
         const article = await articlesDB.findOneBySlug(slug);
@@ -99,7 +89,7 @@ export function ArticleServices({ articlesDB }) {
 
         const populatedArticle = await article.populate(
             "author",
-            "fullname profilePicture",
+            "fullname profilePicture"
         );
         return populatedArticle;
     };
@@ -138,7 +128,7 @@ export function ArticleServices({ articlesDB }) {
         const article = await verifyArticleUtil(id);
 
         // Check if user is the author
-        if (article.author !== userId) {
+        if (String(article.author) !== userId) {
             throw new ApiError("You cannot edit this article", 403);
         }
 
@@ -250,11 +240,10 @@ export function ArticleServices({ articlesDB }) {
         unlikeArticle,
         removeArticle,
         publishArticle,
-        listAllArticles,
         unPublishArticle,
         listOneArticleBySlug,
         listPublishedArticles,
-        listArticlesByCategory,
+        listArticlesByTag,
         verifyArticleUtil,
         listPublishedArticlesOfUser,
         searchArticles,
