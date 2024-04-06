@@ -7,7 +7,7 @@ const baseFunctions = BaseDataLayerFunctions(ArticleModel);
 async function findByFilter(filter) {
     const articles = await ArticleModel.find(filter).populate(
         "author",
-        "profilePicture fullname",
+        "profilePicture fullname"
     );
     return articles;
 }
@@ -18,8 +18,32 @@ async function findOneBySlug(slug) {
     return article;
 }
 
+async function insertInBookmarks(articleID, userID) {
+    const article = await ArticleModel.findByIdAndUpdate(
+        articleID,
+        {
+            $push: { bookmarkedBy: userID },
+        },
+        { select: { bookmarkedBy: 1 }, new: true }
+    );
+    return article;
+}
+
+async function removeFromBookmarks(articleID, userID) {
+    const article = await ArticleModel.findByIdAndUpdate(
+        articleID,
+        {
+            $pull: { bookmarkedBy: userID },
+        },
+        { select: { bookmarkedBy: 1 }, new: true }
+    );
+    return article;
+}
+
 export const articlesDB = {
     ...baseFunctions,
     findOneBySlug,
     findByFilter,
+    insertInBookmarks,
+    removeFromBookmarks,
 };
