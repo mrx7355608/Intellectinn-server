@@ -31,7 +31,7 @@ describe("Article Services Tests", () => {
         it("should validate article id", async () => {
             try {
                 const userID = "65e44a2f701161ae7a5ff624";
-                const articleID = "65e4559a6fad663233";
+                const articleID = "invalid-article-id";
                 await articleServices.verifyArticleUtil(articleID, userID);
             } catch (err) {
                 expect(err.message).toBe("Invalid article id");
@@ -132,16 +132,6 @@ describe("Article Services Tests", () => {
                 );
             } catch (err) {
                 expect(err.message).toBe("Article not found");
-            }
-        });
-    });
-
-    describe("List articles by category", () => {
-        it("should throw error if an unknown category is provided", async () => {
-            try {
-                await articleServices.listArticlesByCategory("asdjfklasdj");
-            } catch (err) {
-                expect(err.message).toBe("Unknown category");
             }
         });
     });

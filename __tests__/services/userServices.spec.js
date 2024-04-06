@@ -16,6 +16,7 @@ const usersDB = {
         .fn()
         .mockReturnValueOnce(false)
         .mockReturnValueOnce(true)
+        .mockReturnValueOnce(true)
         .mockReturnValueOnce(false),
 };
 
@@ -30,6 +31,13 @@ const userServices = UserServices({ usersDB });
 
 describe("User services tests", () => {
     describe("Follow users", () => {
+        it("should throw error if user tries to follow himself", async () => {
+            try {
+                await userServices.followUser(mockUser._id, mockUser);
+            } catch (err) {
+                expect(err.message).toBe("You cannot follow yourself");
+            }
+        });
         it("should validate the id of the -folUser-", async () => {
             try {
                 await userServices.followUser("some-invalid-id", mockUser);
