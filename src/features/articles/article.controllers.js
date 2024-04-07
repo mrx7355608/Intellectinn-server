@@ -86,7 +86,7 @@ const updateArticle = catchAsyncError(async (httpObject) => {
         changes
     );
     return {
-        status: 201,
+        status: 200,
         data: newArticle,
     };
 });
