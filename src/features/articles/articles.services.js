@@ -130,6 +130,7 @@ export function ArticleServices({ articlesDB }) {
 
     const editArticle = async (id, userId, changes) => {
         const article = await verifyArticleUtil(id);
+        let dataToUpdate;
 
         // Check if user is the author
         if (String(article.author) !== userId) {
@@ -144,12 +145,22 @@ export function ArticleServices({ articlesDB }) {
             "tags",
             "thumbnail",
         ]);
+        dataToUpdate = filteredObject;
 
         // Validate new data
-        editArticleValidator(filteredObject);
+        editArticleValidator(dataToUpdate);
 
+        // Update the slug if article title has changed
+        const previousTitle = article.title;
+        const newTitle = filteredObject.title;
+        if (filteredObject.title && previousTitle !== newTitle) {
+            dataToUpdate = {
+                ...filteredObject,
+                slug: customSlugBuilder(filteredObject.title || article.title),
+            };
+        }
         // Edit article
-        const updatedArticle = await articlesDB.updateData(id, changes);
+        const updatedArticle = await articlesDB.updateData(id, dataToUpdate);
         return updatedArticle;
     };
 

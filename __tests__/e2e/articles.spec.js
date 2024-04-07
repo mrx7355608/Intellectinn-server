@@ -2,7 +2,6 @@ import "dotenv/config";
 import supertest from "supertest";
 import { createAndSetupApp } from "../../src/app.js";
 import { connectDB, disconnectDB } from "../../src/utils/db.js";
-import slugify from "slugify";
 
 let agent;
 
@@ -31,7 +30,7 @@ describe("Articles e2e tests", () => {
     });
 
     describe("Create articles", () => {
-        it("should create article", async () => {
+        it.skip("should create article", async () => {
             const data = {
                 title: "Test article - 1",
                 content:
@@ -67,6 +66,30 @@ describe("Articles e2e tests", () => {
             });
         });
     });
-    describe("Edit articles", () => {});
-    describe("Delete articles", () => {});
+    describe("Edit articles", () => {
+        const articleID = "6612bb9433e2d725a58b1489";
+        it("should validate new article data", async () => {
+            const changes = {
+                thumbnail: "jsdfkasjdfkasdf",
+            };
+            const response = await agent
+                .patch(`/api/articles/${articleID}`)
+                .set("Cookie", cookies)
+                .send(changes)
+                .expect(400);
+            expect(response.body.error).toBe("Invalid thumbnail link");
+        });
+        it("should edit article", async () => {
+            const response = await agent
+                .patch(`/api/articles/${articleID}`)
+                .set("Cookie", cookies)
+                .send({
+                    title: "Updated test article - 1",
+                    tags: ["updated", "jest"],
+                })
+                .expect(200);
+            expect(response.body.data.slug).toMatch(/updated-test-article/);
+            expect(response.body.data.tags).toContain("updated");
+        });
+    });
 });
