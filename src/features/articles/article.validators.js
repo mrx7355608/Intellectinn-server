@@ -1,10 +1,10 @@
 import joi from "joi";
 import { ApiError } from "../../utils/ApiError.js";
 
-const slugValidationSchema = joi.string().required().min(5).max(500).messages({
+const slugValidationSchema = joi.string().required().min(5).max(100).messages({
     "string.empty": "Article slug cannot be empty",
     "string.min": "Article slug should be 5 characters long at least",
-    "string.max": "Article slug cannot be longer than 500 characters",
+    "string.max": "Article slug cannot be longer than 100 characters",
     "string.base": "Invalid article slug",
 });
 
@@ -29,10 +29,11 @@ const articleValidationSchema = joi.object({
         "string.base": "Article content should be a text value",
         "string.min": "Article content should be at least 500 characters",
     }),
-    thumbnail: joi.string().required().messages({
+    thumbnail: joi.string().uri().required().messages({
         "any.required": "Thumbnail is required",
         "string.empty": "Thumbnail cannot be empty",
         "string.base": "Invalid thumbnail",
+        "string.uri": "Invalid thumbnail link",
     }),
     tags: joi.array().items(joi.string()).min(1).max(10).required().messages({
         "any.required": "Tags are required",
