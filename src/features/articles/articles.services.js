@@ -1,5 +1,9 @@
 import { ApiError } from "../../utils/ApiError.js";
-import { articleValidator, slugValidator } from "./article.validators.js";
+import {
+    articleValidator,
+    editArticleValidator,
+    slugValidator,
+} from "./article.validators.js";
 import { validateMongoID } from "../../utils/validateMongoId.js";
 import { filterUnwantedFields } from "../../utils/filterUnwantedFields.js";
 import { customSlugBuilder } from "../../utils/customSlugBuilder.js";
@@ -132,7 +136,19 @@ export function ArticleServices({ articlesDB }) {
             throw new ApiError("You cannot edit this article", 403);
         }
 
-        // Delete article
+        // Filter un-wanted field from new data
+        const filteredObject = filterUnwantedFields(changes, [
+            "title",
+            "content",
+            "summary",
+            "tags",
+            "thumbnail",
+        ]);
+
+        // Validate new data
+        editArticleValidator(filteredObject);
+
+        // Edit article
         const updatedArticle = await articlesDB.updateData(id, changes);
         return updatedArticle;
     };
