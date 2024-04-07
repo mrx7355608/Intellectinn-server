@@ -1,8 +1,8 @@
-import slugify from "slugify";
 import { ApiError } from "../../utils/ApiError.js";
 import { articleValidator, slugValidator } from "./article.validators.js";
 import { validateMongoID } from "../../utils/validateMongoId.js";
 import { filterUnwantedFields } from "../../utils/filterUnwantedFields.js";
+import { customSlugBuilder } from "../../utils/customSlugBuilder.js";
 
 export function ArticleServices({ articlesDB }) {
     const searchTags = async (query) => {
@@ -117,11 +117,11 @@ export function ArticleServices({ articlesDB }) {
         // Create article data object
         const articleDataObject = {
             ...filteredObject,
-            slug: slugify(data.title),
+            slug: customSlugBuilder(data.title),
             author: userId,
         };
-        const newArticle = await articlesDB.insertData(articleDataObject);
-        return newArticle;
+        const article = await articlesDB.insertData(articleDataObject);
+        return article;
     };
 
     const editArticle = async (id, userId, changes) => {
