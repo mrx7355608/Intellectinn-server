@@ -104,23 +104,20 @@ const deleteArticle = catchAsyncError(async (httpObject) => {
 const likeArticle = catchAsyncError(async (httpObject) => {
     const { articleId } = httpObject.params;
     const userId = String(httpObject.user._id);
-    const updatedArticle = await articleServices.likeArticle(articleId, userId);
+    const updatedLikes = await articleServices.likeArticle(articleId, userId);
     return {
         status: 200,
-        data: updatedArticle,
+        data: updatedLikes,
     };
 });
 
 const unlikeArticle = catchAsyncError(async (httpObject) => {
     const { articleId } = httpObject.params;
     const userId = String(httpObject.user._id);
-    const updatedArticle = await articleServices.unlikeArticle(
-        articleId,
-        userId
-    );
+    const updatedLikes = await articleServices.unlikeArticle(articleId, userId);
     return {
         status: 200,
-        data: updatedArticle,
+        data: updatedLikes,
     };
 });
 

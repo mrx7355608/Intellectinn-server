@@ -18,6 +18,28 @@ async function findOneBySlug(slug) {
     return article;
 }
 
+async function insertInLikes(articleID, userID) {
+    const article = await ArticleModel.findByIdAndUpdate(
+        articleID,
+        {
+            $push: { likes: userID },
+        },
+        { select: { likes: 1 }, new: true }
+    );
+    return article;
+}
+
+async function removeFromLikes(articleID, userID) {
+    const article = await ArticleModel.findByIdAndUpdate(
+        articleID,
+        {
+            $pull: { likes: userID },
+        },
+        { select: { likes: 1 }, new: true }
+    );
+    return article;
+}
+
 async function insertInBookmarks(articleID, userID) {
     const article = await ArticleModel.findByIdAndUpdate(
         articleID,
@@ -46,4 +68,6 @@ export const articlesDB = {
     findByFilter,
     insertInBookmarks,
     removeFromBookmarks,
+    insertInLikes,
+    removeFromLikes,
 };

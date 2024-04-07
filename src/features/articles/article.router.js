@@ -22,8 +22,8 @@ articleRouter.patch("/:articleId", articleControllers.updateArticle);
 articleRouter.delete("/:articleId", articleControllers.deleteArticle);
 
 // LIKE & UN-LIKE
-articleRouter.patch("/:articleId", articleControllers.likeArticle);
-articleRouter.patch("/:articleId", articleControllers.unlikeArticle);
+articleRouter.patch("/like/:articleId", articleControllers.likeArticle);
+articleRouter.patch("/un-like/:articleId", articleControllers.unlikeArticle);
 
 // PUBLISH & UN-PUBLISH
 articleRouter.patch("/:articleId", articleControllers.publishArticle);

@@ -222,8 +222,8 @@ export function ArticleServices({ articlesDB }) {
         }
 
         // like article
-        const updatedArticle = await articlesDB.insertLike(id);
-        return updatedArticle;
+        const updatedArticle = await articlesDB.insertInLikes(id, userId);
+        return updatedArticle.likes;
     };
 
     const unlikeArticle = async (id, userId) => {
@@ -235,8 +235,8 @@ export function ArticleServices({ articlesDB }) {
         }
 
         // like article
-        const updatedArticle = await articlesDB.removeLike(id);
-        return updatedArticle;
+        const updatedArticle = await articlesDB.removeFromLikes(id, userId);
+        return updatedArticle.likes;
     };
 
     /*
