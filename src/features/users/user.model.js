@@ -5,7 +5,7 @@ const userSchema = new Schema(
     {
         fullname: { type: String, required: true },
         email: { type: String, required: true },
-        password: { type: String, required: true },
+        password: { type: String },
         googleId: { type: String, default: null },
         profilePicture: {
             type: String,
@@ -44,7 +44,7 @@ const userSchema = new Schema(
 // Pre document middleware to hash password
 // if user is newly registered or changes his password
 userSchema.pre("save", async function (next) {
-    if (this.isModified("password") || this.isNew) {
+    if (this.password && this.isModified("password")) {
         const hashedPassword = await bc.hash(this.password, 12);
         this.password = hashedPassword;
         next();
