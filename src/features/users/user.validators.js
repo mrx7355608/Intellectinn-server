@@ -6,6 +6,10 @@ const editUserValidationSchema = joi.object({
         "string.empty": "Profile picture url cannot be empty",
         "string.base": "Invalid profile picture url",
     }),
+    topicsInterestedIn: joi.array().items(joi.string()).messages({
+        "array.empty": "Add at least 1 topic you are interested in",
+        "array.base": "Invalid topics",
+    }),
     about: joi.string().min(50).max(500).messages({
         "string.empty": "About cannot be empty",
         "string.base": "Invalid about content",

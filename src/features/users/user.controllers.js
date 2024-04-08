@@ -28,7 +28,7 @@ const unfollowUser = catchAsyncError(async (httpObject) => {
     const { followingID } = httpObject.params;
     const updatedFollowings = await userServices.unfollowUser(
         followingID,
-        user,
+        user
     );
     return {
         status: 200,

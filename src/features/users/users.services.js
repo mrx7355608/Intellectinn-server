@@ -79,6 +79,7 @@ export function UserServices({ usersDB }) {
         const filteredChangesObject = filterUnwantedFields(changes, [
             "profilePicture",
             "about",
+            "topicsInterestedIn",
         ]);
 
         // Validate user changes

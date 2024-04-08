@@ -9,7 +9,8 @@ const userSchema = new Schema(
         googleId: { type: String, default: null },
         profilePicture: {
             type: String,
-            default: "https://res.cloudinary.com/doemiclic/image/upload/v1693055588/default_user_eqn3vt.png"
+            default:
+                "https://res.cloudinary.com/doemiclic/image/upload/v1693055588/default_user_eqn3vt.png",
         },
         about: { type: String, default: "" },
         followers: {
@@ -28,6 +29,10 @@ const userSchema = new Schema(
                     ref: "User",
                 },
             ],
+            default: [],
+        },
+        topicsInterestedIn: {
+            type: [String],
             default: [],
         },
     },
