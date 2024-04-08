@@ -14,21 +14,38 @@ export function setupSessions(app) {
         client: getMongooseClient(),
     });
 
-    const cookieOptions = {
-        secure: process.env.NODE_ENV === "production" ? true : false,
-        httpOnly: true,
-        maxAge: 24 * 3600 * 1000,
+    // TODO: Refactor
+    const prodSessionSettings = {
+        secret: process.env.SESSIONS_SECRET,
+        cookie: {
+            secure: true,
+            httpOnly: true,
+            maxAge: 24 * 3600 * 1000,
+            sameSite: "none",
+        },
+        resave: false,
+        saveUninitialized: false,
+        name: "nvm",
+        store: mongoStore,
+        proxy: true,
     };
 
-    app.use(
-        sessions({
-            secret: process.env.SESSIONS_SECRET,
-            // proxy: true,
-            resave: false,
-            saveUninitialized: false,
-            name: "side",
-            store: mongoStore,
-            cookie: cookieOptions,
-        }),
-    );
+    const devSessionSettings = {
+        secret: process.env.SESSIONS_SECRET,
+        cookie: {
+            secure: false,
+            httpOnly: true,
+            maxAge: 24 * 3600 * 1000,
+        },
+        resave: false,
+        saveUninitialized: false,
+        name: "nvm",
+        store: mongoStore,
+    };
+
+    if (process.env.NODE_ENV === "production") {
+        app.use(sessions(prodSessionSettings));
+    } else {
+        app.use(sessions(devSessionSettings));
+    }
 }
