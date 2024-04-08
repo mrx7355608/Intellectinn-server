@@ -5,8 +5,8 @@ import { isAuthenticated } from "../../middlewares/isAuthenticated.js";
 const userRouter = Router();
 
 userRouter.get("/me", isAuthenticated, userControllers.getLoggedInUser);
-userRouter.get("/:userID", userControllers.getUserProfile);
 userRouter.get("/search", userControllers.searchUsers);
+userRouter.get("/:userID", userControllers.getUserProfile);
 userRouter.get("/followers/:userID", userControllers.getUserFollowers);
 userRouter.get("/following/:userID", userControllers.getUserFollowings);
 
