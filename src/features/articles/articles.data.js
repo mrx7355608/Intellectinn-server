@@ -5,10 +5,9 @@ const baseFunctions = BaseDataLayerFunctions(ArticleModel);
 
 // FIND BY FILTER
 async function findByFilter(filter) {
-    const articles = await ArticleModel.find(filter).populate(
-        "author",
-        "profilePicture fullname"
-    );
+    const articles = await ArticleModel.find(filter)
+        .populate("author", "profilePicture fullname")
+        .sort("-createdAt");
     return articles;
 }
 
@@ -24,7 +23,7 @@ async function insertInLikes(articleID, userID) {
         {
             $push: { likes: userID },
         },
-        { select: { likes: 1 }, new: true }
+        { select: { likes: 1 }, new: true },
     );
     return article;
 }
@@ -35,7 +34,7 @@ async function removeFromLikes(articleID, userID) {
         {
             $pull: { likes: userID },
         },
-        { select: { likes: 1 }, new: true }
+        { select: { likes: 1 }, new: true },
     );
     return article;
 }
@@ -46,7 +45,7 @@ async function insertInBookmarks(articleID, userID) {
         {
             $push: { bookmarkedBy: userID },
         },
-        { select: { bookmarkedBy: 1 }, new: true }
+        { select: { bookmarkedBy: 1 }, new: true },
     );
     return article;
 }
@@ -57,7 +56,7 @@ async function removeFromBookmarks(articleID, userID) {
         {
             $pull: { bookmarkedBy: userID },
         },
-        { select: { bookmarkedBy: 1 }, new: true }
+        { select: { bookmarkedBy: 1 }, new: true },
     );
     return article;
 }

@@ -5,7 +5,9 @@ const baseFunctions = BaseDataLayerFunctions(CommentModel);
 
 // FIND BY ARTICLE
 async function findByArticleId(articleId) {
-    const comments = await CommentModel.find({ articleId });
+    const comments = await CommentModel.find({ articleId })
+        .populate("user", "profilePicture fullname")
+        .sort("-createdAt");
     return comments;
 }
 

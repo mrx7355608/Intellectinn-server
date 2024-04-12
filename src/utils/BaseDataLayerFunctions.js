@@ -1,6 +1,6 @@
 export function BaseDataLayerFunctions(model) {
     const findAll = async () => {
-        const data = await model.find({});
+        const data = await model.find({}).sort("-createdAt");
         return data;
     };
 
