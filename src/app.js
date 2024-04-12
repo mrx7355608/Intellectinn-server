@@ -9,6 +9,8 @@ import { userRouter } from "./features/users/user.router.js";
 import { articleRouter } from "./features/articles/article.router.js";
 import { commentsRouter } from "./features/comments/comments.router.js";
 import { bookmarkRouter } from "./features/bookmarks/bookmark.router.js";
+import { __dirname } from "./utils/dirname.js";
+import path from "path";
 
 export function createAndSetupApp() {
     const app = express();
@@ -24,6 +26,11 @@ export function createAndSetupApp() {
     app.use("/api/articles", articleRouter);
     app.use("/api/comments", commentsRouter);
     app.use("/api/bookmarks", bookmarkRouter);
+
+    // Serve react index.html page
+    app.get("*", (req, res) => {
+        res.sendFile(path.join(__dirname, "..", "..", "dist", "index.html"));
+    });
 
     // ERROR HANDLERS
     app.use(catch404);

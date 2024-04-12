@@ -1,0 +1,1 @@
+import{r as e,p as f}from"./index-DYWyMemB.js";function d(r){const[n,a]=e.useState(!0),[o,s]=e.useState(""),[c,u]=e.useState([]);return e.useEffect(()=>{a(!0),f.get(r).then(t=>t.data).then(t=>{t.error?s(t.error):u(t.data)}).catch(()=>s("Internal server error")).finally(()=>a(!1))},[r]),{loading:n,err:o,data:c}}export{d as u};
