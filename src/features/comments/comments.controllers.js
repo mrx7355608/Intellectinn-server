@@ -7,7 +7,7 @@ const commentsServices = CommentsServices({ commentsDB, articlesDB });
 
 const getAllCommentsOfArticle = catchAsyncError(async (httpObject) => {
     const { articleId } = httpObject.params;
-    const comments = await commentsServices.listCommentByArticle(articleId);
+    const comments = await commentsServices.listCommentsByArticle(articleId);
     return {
         status: 200,
         data: comments,
@@ -22,7 +22,7 @@ const createNewComment = catchAsyncError(async (httpObject) => {
     const newComment = await commentsServices.addComment(
         articleId,
         userId,
-        data
+        data,
     );
     return {
         status: 201,
@@ -37,7 +37,7 @@ const updateComment = catchAsyncError(async (httpObject) => {
     const updatedComment = await commentsServices.editComment(
         articleId,
         _id,
-        changes
+        changes,
     );
     return {
         status: 200,
@@ -46,9 +46,9 @@ const updateComment = catchAsyncError(async (httpObject) => {
 });
 
 const deleteComment = catchAsyncError(async (httpObject) => {
-    const { articleId } = httpObject.params;
+    const { commentId } = httpObject.params;
     const { _id } = httpObject.user;
-    await commentsServices.removeComment(articleId, _id);
+    await commentsServices.removeComment(commentId, String(_id));
     return {
         status: 204,
         data: null,

@@ -4,7 +4,7 @@ import { validateMongoID } from "../../utils/validateMongoId.js";
 import { commentValidator } from "./comments.validators.js";
 
 export function CommentsServices({ commentsDB, articlesDB }) {
-    const listCommentByArticle = async (articleId) => {
+    const listCommentsByArticle = async (articleId) => {
         // Validate articleId
         validateMongoID(articleId, "article");
 
@@ -16,16 +16,12 @@ export function CommentsServices({ commentsDB, articlesDB }) {
 
         // Fetch  comments from database
         const comments = await commentsDB.findByArticleId(articleId);
-        const populatedComments = await comments.populate(
-            "author",
-            "profilePicture fullname"
-        );
-        return populatedComments;
+        return comments;
     };
 
     const addComment = async (articleId, userId, data) => {
         // Validate articleId
-        validateMongoID(article, "article");
+        validateMongoID(articleId, "article");
 
         // Check if article exists
         const article = await articlesDB.findById(articleId);
@@ -42,11 +38,15 @@ export function CommentsServices({ commentsDB, articlesDB }) {
         const commentDataObject = {
             ...filteredObject,
             articleId: articleId,
-            author: userId,
+            user: userId,
         };
 
         const newComment = await commentsDB.insertData(commentDataObject);
-        return newComment;
+        const populatedComment = newComment.populate(
+            "user",
+            "profilePicture fullname",
+        );
+        return populatedComment;
     };
 
     const editComment = async (id, userId, changes) => {
@@ -62,7 +62,7 @@ export function CommentsServices({ commentsDB, articlesDB }) {
         }
 
         // Check if user is the author of the comment
-        if (userId !== comment.author) {
+        if (userId !== comment.user) {
             throw new ApiError("You cannot edit this comment", 403);
         }
 
@@ -70,32 +70,32 @@ export function CommentsServices({ commentsDB, articlesDB }) {
         const updatedComment = await commentsDB.udpateData(id, changes);
         const populatedUpdatedComment = await updatedComment.populate(
             "author",
-            "profilePicture fullname"
+            "profilePicture fullname",
         );
         return populatedUpdatedComment;
     };
 
-    const removeComment = async (id, userId) => {
+    const removeComment = async (commentId, userId) => {
         // Validate comment id
-        validateMongoID(id);
+        validateMongoID(commentId);
 
         // Check if comment exists
-        const comment = await commentsDB.findById(id);
+        const comment = await commentsDB.findById(commentId);
         if (!comment) {
-            throw new ApiError("Comment  not found", 404);
+            throw new ApiError("Comment not found", 404);
         }
 
         // Check if user is the author of the comment
-        if (userId !== comment.author) {
+        if (userId !== String(comment.user)) {
             throw new ApiError("You cannot delete this comment", 403);
         }
 
-        await commentsDB.deleteData(id);
+        await commentsDB.deleteData(commentId);
         return null;
     };
 
     return {
-        listCommentByArticle,
+        listCommentsByArticle,
         addComment,
         editComment,
         removeComment,

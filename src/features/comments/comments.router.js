@@ -4,11 +4,11 @@ import { isAuthenticated } from "../../middlewares/isAuthenticated.js";
 
 const commentsRouter = Router();
 
-commentsRouter.get("/", commentsControllers.getAllCommentsOfArticle);
+commentsRouter.get("/:articleId", commentsControllers.getAllCommentsOfArticle);
 
 commentsRouter.use(isAuthenticated);
-commentsRouter.post("/", commentsControllers.createNewComment);
-commentsRouter.patch("/:articleId", commentsControllers.updateComment);
-commentsRouter.delete("/:articleId", commentsControllers.deleteComment);
+commentsRouter.post("/:articleId", commentsControllers.createNewComment);
+commentsRouter.patch("/:commentId", commentsControllers.updateComment);
+commentsRouter.delete("/:commentId", commentsControllers.deleteComment);
 
 export { commentsRouter };
