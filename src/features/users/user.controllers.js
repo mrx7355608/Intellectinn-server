@@ -28,7 +28,7 @@ const unfollowUser = catchAsyncError(async (httpObject) => {
     const { followingID } = httpObject.params;
     const updatedFollowings = await userServices.unfollowUser(
         followingID,
-        user
+        user,
     );
     return {
         status: 200,
@@ -64,21 +64,12 @@ const getUserProfile = catchAsyncError(async (httpObject) => {
     };
 });
 
-const getUserFollowings = catchAsyncError(async (httpObject) => {
-    const userID = httpObject.params.userID;
-    const following = await userServices.listUserFollowing(userID);
+const getUserData = catchAsyncError(async (httpObject) => {
+    const { type, userID } = httpObject.params;
+    const data = await userServices.listUserData(userID, type);
     return {
         status: 200,
-        data: following,
-    };
-});
-
-const getUserFollowers = catchAsyncError(async (httpObject) => {
-    const userID = httpObject.params.userID;
-    const followers = await userServices.listUserFollowers(userID);
-    return {
-        status: 200,
-        data: followers,
+        data: data,
     };
 });
 
@@ -104,7 +95,6 @@ export const userControllers = {
     deleteUser,
     getUserProfile,
     getLoggedInUser,
+    getUserData,
     searchUsers,
-    getUserFollowers,
-    getUserFollowings,
 };

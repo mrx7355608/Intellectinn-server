@@ -7,8 +7,7 @@ const userRouter = Router();
 userRouter.get("/me", isAuthenticated, userControllers.getLoggedInUser);
 userRouter.get("/search", userControllers.searchUsers);
 userRouter.get("/:userID", userControllers.getUserProfile);
-userRouter.get("/followers/:userID", userControllers.getUserFollowers);
-userRouter.get("/following/:userID", userControllers.getUserFollowings);
+userRouter.get("/:userID/:type", userControllers.getUserData);
 
 userRouter.use(isAuthenticated);
 userRouter

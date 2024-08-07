@@ -2,6 +2,7 @@ import { validateMongoID } from "../../utils/validateMongoId.js";
 import { ApiError } from "../../utils/ApiError.js";
 import { editDataValidator } from "./user.validators.js";
 import { filterUnwantedFields } from "../../utils/filterUnwantedFields.js";
+import { ArticleModel } from "../articles/articles.model.js";
 
 export function UserServices({ usersDB }) {
     const _userExists = async (id) => {
@@ -36,7 +37,7 @@ export function UserServices({ usersDB }) {
 
         const updatedMe = await usersDB.insertInFollowing(
             me._id,
-            userToFollowID
+            userToFollowID,
         );
         await usersDB.insertInFollowers(me._id, userToFollowID);
 
@@ -66,7 +67,7 @@ export function UserServices({ usersDB }) {
         // If yes, then unfollow user
         const updatedUser = await usersDB.removeFromFollowing(
             me._id,
-            unfollowUserID
+            unfollowUserID,
         );
         await usersDB.removeFromFollowers(me._id, unfollowUserID);
 
@@ -88,7 +89,7 @@ export function UserServices({ usersDB }) {
         // Update user
         const updatedUser = await usersDB.updateUser(
             userId,
-            filteredChangesObject
+            filteredChangesObject,
         );
         return updatedUser;
     };
@@ -100,7 +101,7 @@ export function UserServices({ usersDB }) {
         return null;
     };
 
-    const listUserFollowing = async (id) => {
+    const listUserData = async (id, type) => {
         validateMongoID(id, "user");
         const user = await _userExists(id);
         if (!user) {
@@ -114,34 +115,45 @@ export function UserServices({ usersDB }) {
         user.email = undefined;
         user.googleId = undefined;
 
-        const populatedUser = await user.populate(
-            "following",
-            "about profilePicture fullname"
-        );
+        let data;
 
-        return populatedUser.following;
-    };
+        switch (type) {
+            case "followers": {
+                const d = await user.populate(
+                    "followers",
+                    "about profilePicture fullname",
+                );
+                data = d.followers;
+                break;
+            }
 
-    const listUserFollowers = async (id) => {
-        validateMongoID(id, "user");
-        const user = await _userExists(id);
-        if (!user) {
-            throw new ApiError("User not found", 404);
+            case "following": {
+                const d = await user.populate(
+                    "following",
+                    "about profilePicture fullname",
+                );
+                data = d.following;
+                break;
+            }
+
+            case "bookmarks":
+                data = await ArticleModel.find({
+                    bookmarkedBy: { $in: id },
+                }).populate("author", "profilePicture fullname");
+                break;
+
+            case "publications":
+                data = await ArticleModel.find({
+                    author: id,
+                }).populate("author", "profilePicture fullname");
+                break;
+
+            default:
+                data = [];
+                break;
         }
 
-        // Remove sensitive fields
-        user.__v = undefined;
-        user.updatedAt = undefined;
-        user.password = undefined;
-        user.email = undefined;
-        user.googleId = undefined;
-
-        const populatedUser = await user.populate(
-            "followers",
-            "about profilePicture fullname"
-        );
-
-        return populatedUser.followers;
+        return data;
     };
 
     // GET PROFILE OF A USER
@@ -169,7 +181,6 @@ export function UserServices({ usersDB }) {
         editUser,
         removeUser,
         listUserProfile,
-        listUserFollowers,
-        listUserFollowing,
+        listUserData,
     };
 }
