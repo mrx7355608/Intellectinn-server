@@ -66,11 +66,21 @@ const postVerifyAccount = catchAsyncError(async (req, res) => {
     };
 });
 
+const patchChangePassword = catchAsyncError(async (req, res) => {
+    const { oldPassword, newPassword } = req.body;
+    await authServices.changePassword(oldPassword, newPassword, req.user._id);
+    return {
+        status: 200,
+        data: "Password updated!",
+    };
+});
+
 export const authControllers = {
     postSignup,
     postLogin,
     postLogout,
     postVerifyAccount,
+    patchChangePassword,
 };
 
 /*

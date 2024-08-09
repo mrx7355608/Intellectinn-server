@@ -46,7 +46,7 @@ export default function passportSetup() {
 
                 if (!user.isVerified) {
                     return done(null, false, {
-                        message: "Please verify your email first to login",
+                        message: "Please verify your email to login",
                     });
                 }
 

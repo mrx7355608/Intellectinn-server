@@ -10,6 +10,11 @@ authRouter.post("/signup", isGuest, authControllers.postSignup);
 authRouter.post("/login", isGuest, authControllers.postLogin);
 authRouter.post("/logout", isAuthenticated, authControllers.postLogout);
 authRouter.post("/verify-account", authControllers.postVerifyAccount);
+authRouter.patch(
+    "/change-password",
+    isAuthenticated,
+    authControllers.patchChangePassword,
+);
 authRouter.get(
     "/google",
     passport.authenticate("google", { scope: ["profile", "email"] }),
