@@ -11,14 +11,14 @@ authRouter.post("/login", isGuest, authControllers.login);
 authRouter.post("/logout", isAuthenticated, authControllers.logout);
 authRouter.get(
     "/google",
-    passport.authenticate("google", { scope: ["profile", "email"] })
+    passport.authenticate("google", { scope: ["profile", "email"] }),
 );
 authRouter.get(
     "/google/callback",
     passport.authenticate("google", {
         failureRedirect: "/api/auth/failure",
-        successRedirect: process.env.CLIENT_URL,
-    })
+        successRedirect: "/",
+    }),
 );
 
 authRouter.get("/failure", (req, res) => {
