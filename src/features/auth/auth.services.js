@@ -1,4 +1,5 @@
 import { ApiError } from "../../utils/ApiError.js";
+import { verifyToken } from "../../utils/token.js";
 import { signupValidator } from "./auth.validators.js";
 
 export function AuthServices({ usersDB }) {
@@ -26,7 +27,15 @@ export function AuthServices({ usersDB }) {
         return newUser;
     };
 
+    const verifyUserAccount = async (token) => {
+        const payload = verifyToken(token);
+        await usersDB.updateData(payload.userId, {
+            isVerified: true,
+        });
+        return null;
+    };
+
     const resetPassword = async () => {};
 
-    return { signup, resetPassword };
+    return { signup, verifyUserAccount, resetPassword };
 }

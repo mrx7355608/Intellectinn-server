@@ -7,6 +7,10 @@ const userSchema = new Schema(
         email: { type: String, required: true },
         password: { type: String },
         googleId: { type: String, default: null },
+        isVerified: {
+            type: Boolean,
+            default: false,
+        },
         profilePicture: {
             type: String,
             default:
@@ -38,7 +42,7 @@ const userSchema = new Schema(
     },
     {
         timestamps: true,
-    }
+    },
 );
 
 // Pre document middleware to hash password

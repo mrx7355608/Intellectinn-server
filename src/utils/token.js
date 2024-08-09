@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-export function generate(payload) {
+export function generateToken(payload) {
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
         expiresIn: "10m",
     });
@@ -8,7 +8,7 @@ export function generate(payload) {
     return token;
 }
 
-export function verify(token) {
-    const isValid = jwt.verify(token, process.env.JWT_SECRET);
-    return isValid;
+export function verifyToken(token) {
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
+    return payload;
 }

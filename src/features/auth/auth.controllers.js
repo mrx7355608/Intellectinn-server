@@ -2,6 +2,7 @@ import { AuthServices } from "./auth.services.js";
 import { catchAsyncError } from "../../utils/catchAsyncError.js";
 import { usersDB } from "../users/user.data.js";
 import passport from "passport";
+import { verifyToken } from "../../utils/token.js";
 
 const authServices = AuthServices({ usersDB });
 
@@ -19,6 +20,7 @@ const login = async (req, res, next) => {
         if (err) {
             return next(err);
         }
+
         if (!user) {
             return res.status(400).json({
                 ok: false,
@@ -44,10 +46,20 @@ const logout = async (req, res, next) => {
     });
 };
 
+const verifyAccount = catchAsyncError(async (req, res, next) => {
+    const { token } = req.query;
+    await authServices.verifyUserAccount(token);
+    return res.status(200).json({
+        ok: true,
+        data: null,
+    });
+});
+
 export const authControllers = {
     signup,
     login,
     logout,
+    verifyAccount,
 };
 
 /*

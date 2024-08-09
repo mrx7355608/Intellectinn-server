@@ -29,8 +29,8 @@ export default function passportSetup() {
                 };
                 const newUser = await UserModel.create(newUserData);
                 return done(null, newUser);
-            }
-        )
+            },
+        ),
     );
     passport.use(
         new Strategy(
@@ -44,10 +44,16 @@ export default function passportSetup() {
                     });
                 }
 
+                if (!user.isVerified) {
+                    return done(null, false, {
+                        message: "Please verify your email first to login",
+                    });
+                }
+
                 // Validate password
                 const isValidPassword = await bc.compare(
                     password,
-                    user.password
+                    user.password,
                 );
                 if (!isValidPassword) {
                     return done(null, false, {
@@ -56,8 +62,8 @@ export default function passportSetup() {
                 }
 
                 return done(null, user);
-            }
-        )
+            },
+        ),
     );
 
     passport.serializeUser((user, done) => done(null, user.id));
