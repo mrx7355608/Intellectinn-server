@@ -1,13 +1,11 @@
 import express from "express";
-import helmet from "helmet";
+// import helmet from "helmet";
 import hpp from "hpp";
-// import cors from "cors";
 import morgan from "morgan";
-import { __dirname } from "../utils/dirname.js";
 import path from "path";
 
 export function setupGenerals(app) {
-    app.use(helmet());
+    // app.use(helmet());
     app.use(hpp());
     app.use(morgan("dev"));
     // app.use(
