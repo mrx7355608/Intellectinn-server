@@ -27,9 +27,27 @@ export function AuthServices({ usersDB }) {
         return newUser;
     };
 
-    const verifyUserAccount = async (token) => {
+    const verifyAccount = async (token) => {
+        if (!token) {
+            throw new ApiError(
+                "Token is missing, request verification link again",
+                403,
+            );
+        }
+
         const payload = verifyToken(token);
-        await usersDB.updateData(payload.userId, {
+
+        // Get user
+        const user = await usersDB.findUserById(payload.userId);
+        if (!user) {
+            throw new ApiError("User no longer exists", 404);
+        }
+
+        if (user.isVerified) {
+            throw new ApiError("Account is already verified", 400);
+        }
+
+        await usersDB.updateUser(payload.userId, {
             isVerified: true,
         });
         return null;
@@ -37,5 +55,5 @@ export function AuthServices({ usersDB }) {
 
     const resetPassword = async () => {};
 
-    return { signup, verifyUserAccount, resetPassword };
+    return { signup, verifyAccount, resetPassword };
 }

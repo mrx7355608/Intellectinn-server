@@ -11,6 +11,7 @@ const transporter = createTransport({
 });
 
 export async function sendVerificationMail(userEmail, token) {
+    console.log("sending mail");
     await transporter.sendMail({
         from: process.env.EMAIL_SENDER,
         to: userEmail,

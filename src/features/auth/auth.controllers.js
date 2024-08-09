@@ -2,15 +2,27 @@ import { AuthServices } from "./auth.services.js";
 import { catchAsyncError } from "../../utils/catchAsyncError.js";
 import { usersDB } from "../users/user.data.js";
 import passport from "passport";
+import { sendVerificationMail } from "../../utils/mail.js";
+import { generateToken } from "../../utils/token.js";
 
 const authServices = AuthServices({ usersDB });
 
 const postSignup = catchAsyncError(async (httpObject) => {
     const signupData = httpObject.body;
     const newUser = await authServices.signup(signupData);
+
+    console.log("User registered");
+
+    // Send verification link
+    const token = generateToken({ userId: newUser._id });
+    console.log("Token generated");
+
+    await sendVerificationMail(newUser.email, token);
+    console.log("Mail sent");
+
     return {
         status: 201,
-        data: newUser,
+        data: `An account verification link has been sent to ${newUser.email}, please verify your account before logging in`,
     };
 });
 
@@ -45,13 +57,13 @@ const postLogout = async (req, res, next) => {
     });
 };
 
-const postVerifyAccount = catchAsyncError(async (req, res, next) => {
+const postVerifyAccount = catchAsyncError(async (req, res) => {
     const { token } = req.query;
     await authServices.verifyAccount(token);
-    return res.status(200).json({
-        ok: true,
-        data: null,
-    });
+    return {
+        status: 200,
+        data: "Email verified!",
+    };
 });
 
 export const authControllers = {

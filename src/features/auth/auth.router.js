@@ -9,7 +9,7 @@ const authRouter = Router();
 authRouter.post("/signup", isGuest, authControllers.postSignup);
 authRouter.post("/login", isGuest, authControllers.postLogin);
 authRouter.post("/logout", isAuthenticated, authControllers.postLogout);
-authRouter.post("/verify-email", authControllers.postVerifyAccount);
+authRouter.post("/verify-account", authControllers.postVerifyAccount);
 authRouter.get(
     "/google",
     passport.authenticate("google", { scope: ["profile", "email"] }),
