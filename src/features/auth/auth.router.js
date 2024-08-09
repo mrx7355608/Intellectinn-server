@@ -6,10 +6,10 @@ import passport from "passport";
 
 const authRouter = Router();
 
-authRouter.post("/signup", isGuest, authControllers.signup);
-authRouter.post("/login", isGuest, authControllers.login);
-authRouter.post("/logout", isAuthenticated, authControllers.logout);
-authRouter.post("/verify-email", authControllers.verifyAccount);
+authRouter.post("/signup", isGuest, authControllers.postSignup);
+authRouter.post("/login", isGuest, authControllers.postLogin);
+authRouter.post("/logout", isAuthenticated, authControllers.postLogout);
+authRouter.post("/verify-email", authControllers.postVerifyAccount);
 authRouter.get(
     "/google",
     passport.authenticate("google", { scope: ["profile", "email"] }),

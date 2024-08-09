@@ -2,11 +2,10 @@ import { AuthServices } from "./auth.services.js";
 import { catchAsyncError } from "../../utils/catchAsyncError.js";
 import { usersDB } from "../users/user.data.js";
 import passport from "passport";
-import { verifyToken } from "../../utils/token.js";
 
 const authServices = AuthServices({ usersDB });
 
-const signup = catchAsyncError(async (httpObject) => {
+const postSignup = catchAsyncError(async (httpObject) => {
     const signupData = httpObject.body;
     const newUser = await authServices.signup(signupData);
     return {
@@ -15,7 +14,7 @@ const signup = catchAsyncError(async (httpObject) => {
     };
 });
 
-const login = async (req, res, next) => {
+const postLogin = async (req, res, next) => {
     passport.authenticate("local", (err, user, info) => {
         if (err) {
             return next(err);
@@ -33,7 +32,7 @@ const login = async (req, res, next) => {
     })(req, res, next);
 };
 
-const logout = async (req, res, next) => {
+const postLogout = async (req, res, next) => {
     req.logOut((err) => {
         if (err) {
             return next(err);
@@ -46,9 +45,9 @@ const logout = async (req, res, next) => {
     });
 };
 
-const verifyAccount = catchAsyncError(async (req, res, next) => {
+const postVerifyAccount = catchAsyncError(async (req, res, next) => {
     const { token } = req.query;
-    await authServices.verifyUserAccount(token);
+    await authServices.verifyAccount(token);
     return res.status(200).json({
         ok: true,
         data: null,
@@ -56,10 +55,10 @@ const verifyAccount = catchAsyncError(async (req, res, next) => {
 });
 
 export const authControllers = {
-    signup,
-    login,
-    logout,
-    verifyAccount,
+    postSignup,
+    postLogin,
+    postLogout,
+    postVerifyAccount,
 };
 
 /*
