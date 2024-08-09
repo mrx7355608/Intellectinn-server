@@ -21,13 +21,12 @@ export function setupSessions(app) {
             secure: true,
             httpOnly: true,
             maxAge: 24 * 3600 * 1000,
-            sameSite: "none",
+            sameSite: "strict",
         },
         resave: false,
         saveUninitialized: false,
         name: "nvm",
         store: mongoStore,
-        proxy: true,
     };
 
     const devSessionSettings = {

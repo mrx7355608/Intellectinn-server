@@ -1,22 +1,23 @@
 import express from "express";
 import helmet from "helmet";
 import hpp from "hpp";
-import cors from "cors";
+// import cors from "cors";
 import morgan from "morgan";
 import { __dirname } from "../utils/dirname.js";
 import path from "path";
 
 export function setupGenerals(app) {
-    // app.use(helmet());
+    app.use(helmet());
     app.use(hpp());
     app.use(morgan("dev"));
-    app.use(
-        cors({
-            origin: process.env.CLIENT_URL,
-            credentials: true,
-        }),
-    );
+    // app.use(
+    //     cors({
+    //         origin: process.env.CLIENT_URL,
+    //         credentials: true,
+    //     }),
+    // );
+
     app.use(express.json());
     app.use(express.urlencoded({ extended: false }));
-    app.use(express.static(path.join(__dirname, "..", "..", "dist")));
+    app.use(express.static(path.resolve("dist")));
 }

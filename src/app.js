@@ -27,9 +27,9 @@ export function createAndSetupApp() {
     app.use("/api/comments", commentsRouter);
     app.use("/api/bookmarks", bookmarkRouter);
 
-    // Serve react index.html page
-    app.get("*", (req, res) => {
-        res.sendFile(path.join(__dirname, "..", "..", "dist", "index.html"));
+    // SERVE REACT APP
+    app.get("/*", (_req, res) => {
+        res.sendFile(path.resolve("dist", "index.html"));
     });
 
     // ERROR HANDLERS
