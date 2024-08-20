@@ -9,7 +9,6 @@ import { userRouter } from "./features/users/user.router.js";
 import { articleRouter } from "./features/articles/article.router.js";
 import { commentsRouter } from "./features/comments/comments.router.js";
 import { bookmarkRouter } from "./features/bookmarks/bookmark.router.js";
-import { __dirname } from "./utils/dirname.js";
 import path from "path";
 
 export function createAndSetupApp() {
