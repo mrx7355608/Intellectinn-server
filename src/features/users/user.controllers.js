@@ -64,15 +64,6 @@ const getUserProfile = catchAsyncError(async (httpObject) => {
     };
 });
 
-const getUserData = catchAsyncError(async (httpObject) => {
-    const { type, userID } = httpObject.params;
-    const data = await userServices.listUserData(userID, type);
-    return {
-        status: 200,
-        data: data,
-    };
-});
-
 const getLoggedInUser = catchAsyncError(async (httpObject) => {
     const { user } = httpObject;
 
