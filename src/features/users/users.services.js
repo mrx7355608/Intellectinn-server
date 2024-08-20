@@ -126,6 +126,5 @@ export function UserServices({ usersDB }) {
         editUser,
         removeUser,
         listUserProfile,
-        listUserData,
     };
 }

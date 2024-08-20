@@ -1,3 +1,4 @@
+import path from "path";
 import express from "express";
 import { setupGenerals } from "./loaders/setupGeneralStuff.js";
 import { setupSessions } from "./loaders/setupSessions.js";
@@ -9,7 +10,6 @@ import { userRouter } from "./features/users/user.router.js";
 import { articleRouter } from "./features/articles/article.router.js";
 import { commentsRouter } from "./features/comments/comments.router.js";
 import { bookmarkRouter } from "./features/bookmarks/bookmark.router.js";
-import path from "path";
 
 export function createAndSetupApp() {
     const app = express();

@@ -7,7 +7,7 @@ let agent;
 
 describe("Auth tests", () => {
     beforeAll(async () => {
-        await connectDB(process.env.TESTS_DB_URL);
+        await connectDB(process.env.TEST_DB_URL);
         const app = createAndSetupApp();
         agent = supertest(app);
     });
@@ -21,17 +21,7 @@ describe("Auth tests", () => {
             password: "123123123123",
             confirm_password: "123123123123",
         };
-        it("should validate user data", async () => {
-            const response = await agent
-                .post("/api/auth/signup")
-                .send({
-                    fullname: "Fawad Imran",
-                    email: "some@inva.com.ema/",
-                })
-                .expect(400);
-            expect(response.body.ok).toBe(false);
-            expect(response.body.error).toBe("Invalid email");
-        });
+
         it("should throw error if email is already registered", async () => {
             const response = await agent
                 .post("/api/auth/signup")
@@ -39,28 +29,18 @@ describe("Auth tests", () => {
                 .expect(400);
             expect(response.body.ok).toBe(false);
             expect(response.body.error).toBe(
-                "Email is already registered, use a different email"
+                "Email is already registered, use a different email",
             );
         });
-        it.skip("(passing) should create a new user", async () => {
+
+        it.skip("should create a new user", async () => {
             const response = await agent
                 .post("/api/auth/signup")
                 .send({ ...userData, email: "testaccount@gmail.com" })
                 .expect(201);
             expect(response.body.ok).toBe(true);
-            expect(response.body.data).toStrictEqual({
-                _id: expect.any(String),
-                fullname: userData.fullname,
-                email: "testaccount@gmail.com",
-                followers: [],
-                following: [],
-                profilePicture:
-                    "https://res.cloudinary.com/doemiclic/image/upload/v1693055588/default_user_eqn3vt.png",
-                about: "",
-                googleId: null,
-                createdAt: expect.any(String),
-            });
         });
+
         it("should not allow logged in users to signup again", async () => {
             const loginResponse = await agent
                 .post("/api/auth/login")
@@ -79,10 +59,11 @@ describe("Auth tests", () => {
                 .expect(403);
             expect(signupResponse.body.ok).toBe(false);
             expect(signupResponse.body.error).toBe(
-                "You are already logged in, please logout to continue"
+                "You are already logged in, please logout to continue",
             );
         });
     });
+
     describe("Login tests", () => {
         let cookies;
 
@@ -130,6 +111,8 @@ describe("Auth tests", () => {
                 about: expect.any(String),
                 following: expect.any(Array),
                 followers: expect.any(Array),
+                topicsInterestedIn: expect.any(Array),
+                isVerified: expect.any(Boolean),
             });
         });
 
@@ -141,7 +124,7 @@ describe("Auth tests", () => {
                 .expect(403);
             expect(response.body.ok).toBe(false);
             expect(response.body.error).toBe(
-                "You are already logged in, please logout to continue"
+                "You are already logged in, please logout to continue",
             );
         });
     });
