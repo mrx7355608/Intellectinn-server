@@ -2,27 +2,25 @@ import { AuthServices } from "./auth.services.js";
 import { catchAsyncError } from "../../utils/catchAsyncError.js";
 import { usersDB } from "../users/user.data.js";
 import passport from "passport";
-import { sendVerificationMail } from "../../utils/mail.js";
-import { generateToken } from "../../utils/token.js";
+// import { sendVerificationMail } from "../../utils/mail.js";
+// import { generateToken } from "../../utils/token.js";
 
 const authServices = AuthServices({ usersDB });
 
 const postSignup = catchAsyncError(async (httpObject) => {
     const signupData = httpObject.body;
-    const newUser = await authServices.signup(signupData);
-
-    console.log("User registered");
+    await authServices.signup(signupData);
 
     // Send verification link
-    const token = generateToken({ userId: newUser._id });
-    console.log("Token generated");
+    // const token = generateToken({ userId: newUser._id });
+    // console.log("Token generated");
 
-    await sendVerificationMail(newUser.email, token);
-    console.log("Mail sent");
+    // await sendVerificationMail(newUser.email, token);
+    // console.log("Mail sent");
 
     return {
         status: 201,
-        data: `An account verification link has been sent to ${newUser.email}, please verify your account before logging in`,
+        data: null,
     };
 });
 

@@ -44,11 +44,12 @@ export default function passportSetup() {
                     });
                 }
 
-                if (!user.isVerified) {
-                    return done(null, false, {
-                        message: "Please verify your email to login",
-                    });
-                }
+                // TODO: un-comment later
+                // if (!user.isVerified) {
+                //     return done(null, false, {
+                //         message: "Please verify your email to login",
+                //     });
+                // }
 
                 // Validate password
                 const isValidPassword = await bc.compare(
