@@ -7,8 +7,10 @@ let agent;
 
 describe("Articles e2e tests", () => {
     let cookies;
+    let myId;
+
     beforeAll(async () => {
-        await connectDB(process.env.TESTS_DB_URL);
+        await connectDB(process.env.TEST_DB_URL);
         const app = createAndSetupApp();
         agent = supertest(app);
 
@@ -18,6 +20,7 @@ describe("Articles e2e tests", () => {
             password: "123123123123",
         });
         cookies = response.headers["set-cookie"][0];
+        myId = response.body.data._id;
     });
 
     afterAll(async () => await disconnectDB());
@@ -30,7 +33,7 @@ describe("Articles e2e tests", () => {
     });
 
     describe("Create articles", () => {
-        it.skip("should create article", async () => {
+        it("should create article", async () => {
             const data = {
                 title: "Test article - 1",
                 content:
@@ -91,5 +94,15 @@ describe("Articles e2e tests", () => {
             expect(response.body.data.slug).toMatch(/updated-test-article/);
             expect(response.body.data.tags).toContain("updated");
         });
+    });
+
+    describe("Like / Dislike Articles", () => {
+        it("Like article", async () => {
+            const response = await agent
+                .patch("/api/articles/like-dislike/1123123123")
+                .expect(200);
+            expect(response.body.data.likes).toContain(myId);
+        });
+        it.todo("Dislike article");
     });
 });

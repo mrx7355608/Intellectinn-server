@@ -83,7 +83,7 @@ const updateArticle = catchAsyncError(async (httpObject) => {
     const newArticle = await articleServices.editArticle(
         articleId,
         userId,
-        changes
+        changes,
     );
     return {
         status: 200,
@@ -101,20 +101,13 @@ const deleteArticle = catchAsyncError(async (httpObject) => {
     };
 });
 
-const likeArticle = catchAsyncError(async (httpObject) => {
+const toggleLikes = catchAsyncError(async (httpObject) => {
     const { articleId } = httpObject.params;
     const userId = String(httpObject.user._id);
-    const updatedLikes = await articleServices.likeArticle(articleId, userId);
-    return {
-        status: 200,
-        data: updatedLikes,
-    };
-});
-
-const unlikeArticle = catchAsyncError(async (httpObject) => {
-    const { articleId } = httpObject.params;
-    const userId = String(httpObject.user._id);
-    const updatedLikes = await articleServices.unlikeArticle(articleId, userId);
+    const updatedLikes = await articleServices.likeDislikeArticle(
+        articleId,
+        userId,
+    );
     return {
         status: 200,
         data: updatedLikes,
@@ -126,7 +119,7 @@ const publishArticle = catchAsyncError(async (httpObject) => {
     const userId = String(httpObject.user._id);
     const updatedArticle = await articleServices.publishArticle(
         articleId,
-        userId
+        userId,
     );
     return {
         status: 200,
@@ -139,7 +132,7 @@ const unpublishArticle = catchAsyncError(async (httpObject) => {
     const userId = String(httpObject.user._id);
     const updatedArticle = await articleServices.unPublishArticle(
         articleId,
-        userId
+        userId,
     );
     return {
         status: 200,
@@ -158,8 +151,7 @@ export const articleControllers = {
     createArticle,
     updateArticle,
     deleteArticle,
-    likeArticle,
-    unlikeArticle,
+    toggleLikes,
     publishArticle,
     unpublishArticle,
 };

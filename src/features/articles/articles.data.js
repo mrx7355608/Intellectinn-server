@@ -17,25 +17,29 @@ async function findOneBySlug(slug) {
     return article;
 }
 
-async function insertInLikes(articleID, userID) {
-    const article = await ArticleModel.findByIdAndUpdate(
-        articleID,
-        {
-            $push: { likes: userID },
-        },
-        { select: { likes: 1 }, new: true },
-    );
-    return article;
-}
+async function addRemoveLikes(articleID, userID, operationType) {
+    let operation;
 
-async function removeFromLikes(articleID, userID) {
-    const article = await ArticleModel.findByIdAndUpdate(
-        articleID,
-        {
-            $pull: { likes: userID },
-        },
-        { select: { likes: 1 }, new: true },
-    );
+    switch (operationType) {
+        case "add":
+            operation = {
+                $push: { likes: userID },
+            };
+            break;
+
+        case "remove":
+            operation = {
+                $pull: { likes: userID },
+            };
+            break;
+        default:
+            throw new Error("Invalid Like Operation");
+    }
+
+    const article = await ArticleModel.findByIdAndUpdate(articleID, operation, {
+        select: { likes: 1 },
+        new: true,
+    });
     return article;
 }
 
@@ -67,6 +71,5 @@ export const articlesDB = {
     findByFilter,
     insertInBookmarks,
     removeFromBookmarks,
-    insertInLikes,
-    removeFromLikes,
+    addRemoveLikes,
 };

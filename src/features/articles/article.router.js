@@ -9,7 +9,7 @@ articleRouter.get("/search/tags", articleControllers.searchTags);
 articleRouter.get("/published", articleControllers.getPublishedArticles);
 articleRouter.get(
     "/published/:userID",
-    articleControllers.getPublishedArticlesOfUser
+    articleControllers.getPublishedArticlesOfUser,
 );
 articleRouter.get("/:slug", articleControllers.getOneArticleBySlug);
 articleRouter.get("/:tag", articleControllers.getArticlesByTag);
@@ -21,9 +21,8 @@ articleRouter.post("/", articleControllers.createArticle);
 articleRouter.patch("/:articleId", articleControllers.updateArticle);
 articleRouter.delete("/:articleId", articleControllers.deleteArticle);
 
-// LIKE & UN-LIKE
-articleRouter.patch("/like/:articleId", articleControllers.likeArticle);
-articleRouter.patch("/un-like/:articleId", articleControllers.unlikeArticle);
+// LIKE & DISLIKE
+articleRouter.patch("/like-dislike/:articleId", articleControllers.toggleLikes);
 
 // PUBLISH & UN-PUBLISH
 articleRouter.patch("/:articleId", articleControllers.publishArticle);

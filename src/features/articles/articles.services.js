@@ -17,7 +17,7 @@ export function ArticleServices({ articlesDB }) {
                     $options: "i",
                 },
             },
-            "tags"
+            "tags",
         );
         const tagsList = [];
         articles.forEach((a) => {
@@ -76,7 +76,7 @@ export function ArticleServices({ articlesDB }) {
         });
         const populatedArticles = await articles.populate(
             "author",
-            "fullname profilePicture"
+            "fullname profilePicture",
         );
         return populatedArticles;
     };
@@ -93,7 +93,7 @@ export function ArticleServices({ articlesDB }) {
 
         const populatedArticle = await article.populate(
             "author",
-            "fullname profilePicture"
+            "fullname profilePicture",
         );
         return populatedArticle;
     };
@@ -213,29 +213,23 @@ export function ArticleServices({ articlesDB }) {
         return null;
     };
 
-    const likeArticle = async (id, userId) => {
+    const likeDislikeArticle = async (id, userId) => {
         const article = await verifyArticleUtil(id);
+        let operation;
 
         // Check if user has already liked the article
         if (article.likes.includes(userId)) {
-            throw new ApiError("You have already liked this article", 400);
+            operation = "remove";
+        } else {
+            operation = "add";
         }
 
         // like article
-        const updatedArticle = await articlesDB.insertInLikes(id, userId);
-        return updatedArticle.likes;
-    };
-
-    const unlikeArticle = async (id, userId) => {
-        const article = await verifyArticleUtil(id);
-
-        // Check if user has already previously not liked the article
-        if (article.likes.includes(userId) === false) {
-            throw new ApiError("You have not liked this article yet", 400);
-        }
-
-        // like article
-        const updatedArticle = await articlesDB.removeFromLikes(id, userId);
+        const updatedArticle = await articlesDB.addRemoveLikes(
+            id,
+            userId,
+            operation,
+        );
         return updatedArticle.likes;
     };
 
@@ -263,8 +257,7 @@ export function ArticleServices({ articlesDB }) {
     return {
         addArticle,
         editArticle,
-        likeArticle,
-        unlikeArticle,
+        likeDislikeArticle,
         removeArticle,
         publishArticle,
         unPublishArticle,
