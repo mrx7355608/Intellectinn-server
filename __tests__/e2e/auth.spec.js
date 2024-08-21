@@ -22,6 +22,14 @@ describe("Auth tests", () => {
             confirm_password: "123123123123",
         };
 
+        it.skip("should create a new user", async () => {
+            const response = await agent
+                .post("/api/auth/signup")
+                .send(userData)
+                .expect(201);
+            expect(response.body.ok).toBe(true);
+        });
+
         it("should throw error if email is already registered", async () => {
             const response = await agent
                 .post("/api/auth/signup")
@@ -31,14 +39,6 @@ describe("Auth tests", () => {
             expect(response.body.error).toBe(
                 "Email is already registered, use a different email",
             );
-        });
-
-        it.skip("should create a new user", async () => {
-            const response = await agent
-                .post("/api/auth/signup")
-                .send({ ...userData, email: "testaccount@gmail.com" })
-                .expect(201);
-            expect(response.body.ok).toBe(true);
         });
 
         it("should not allow logged in users to signup again", async () => {

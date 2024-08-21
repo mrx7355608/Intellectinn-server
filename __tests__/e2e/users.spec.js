@@ -17,7 +17,7 @@ describe("User tests", () => {
         // Create new user
         const userData = {
             fullname: "Fawad Imran",
-            email: "fwd@gmail.com",
+            email: "fwd1@gmail.com",
             password: "123123123123",
             confirm_password: "123123123123",
         };
