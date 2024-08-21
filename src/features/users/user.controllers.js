@@ -50,7 +50,7 @@ const deleteUser = catchAsyncError(async (httpObject) => {
     const userId = httpObject.user._id;
     await userServices.removeUser(userId);
     return {
-        statsus: 204,
+        status: 204,
         data: null,
     };
 });
