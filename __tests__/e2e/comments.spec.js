@@ -8,7 +8,7 @@ let agent;
 describe("Comments e2e tests", () => {
     let cookies;
     beforeAll(async () => {
-        await connectDB(process.env.TESTS_DB_URL);
+        await connectDB(process.env.TEST_DB_URL);
         const app = createAndSetupApp();
         agent = supertest(app);
 

@@ -22,6 +22,10 @@ const articlesDB = {
         .mockReturnValueOnce(notPublishedArticle)
         .mockReturnValueOnce(notPublishedArticle)
         .mockReturnValue(mockArticleWithAuthor),
+    addRemoveLikes: (_id, userId) => {
+        mockArticleWithAuthor.likes.push(userId)
+        return mockArticleWithAuthor;
+    }
 };
 
 const articleServices = ArticleServices({ articlesDB });
@@ -98,7 +102,7 @@ describe("Article Services Tests", () => {
             try {
                 const userID = "65e44a401b2d7b2678969fca";
                 const articleID = "65e44a2f701161ae7a5ff624";
-                await articleServices.likeArticle(articleID, userID);
+                await articleServices.likeDislikeArticle(articleID, userID);
             } catch (err) {
                 expect(err.message).toBe("You have already liked this article");
             }
@@ -110,7 +114,7 @@ describe("Article Services Tests", () => {
             try {
                 const userID = "65e456094561d1b9ad011776";
                 const articleID = "65e44a2f701161ae7a5ff624";
-                await articleServices.unlikeArticle(articleID, userID);
+                await articleServices.likeDislikeArticle(articleID, userID);
             } catch (err) {
                 expect(err.message).toBe("You have not liked this article yet");
             }
@@ -157,3 +161,4 @@ describe("Article Services Tests", () => {
         });
     });
 });
+

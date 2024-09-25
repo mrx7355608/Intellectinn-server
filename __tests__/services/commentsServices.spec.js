@@ -19,7 +19,7 @@ describe("Comments services tests", () => {
     describe("List comments of articles", () => {
         it("should validate article id", async () => {
             try {
-                await commentsServices.listCommentByArticle(12312);
+                await commentsServices.listCommentsByArticle(12312);
             } catch (err) {
                 expect(err.message).toBe("Invalid article id");
             }
@@ -27,7 +27,7 @@ describe("Comments services tests", () => {
 
         it("should throw error if article does not exist", async () => {
             try {
-                await commentsServices.listCommentByArticle(
+                await commentsServices.listCommentsByArticle(
                     "65e5e10f2cef55f8df746322"
                 );
             } catch (err) {
