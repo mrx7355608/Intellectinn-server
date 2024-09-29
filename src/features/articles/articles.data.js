@@ -37,7 +37,7 @@ async function addRemoveLikes(articleID, userID, operationType) {
     }
 
     const article = await ArticleModel.findByIdAndUpdate(articleID, operation, {
-        select: { likes: 1 },
+        select: { likes: 1, _id: 0 },
         new: true,
     });
     return article;

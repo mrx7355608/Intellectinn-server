@@ -8,8 +8,6 @@ export function errorHandler(err, _req, res, _next) {
     const status = err.statusCode || 500;
     let message = err.message || "Internal server error";
 
-    console.log({ message });
-
     if (err.name === "TokenExpiredError") {
         message = "Token has expired, request again";
     } else if (err.name === "JsonWebTokenError") {

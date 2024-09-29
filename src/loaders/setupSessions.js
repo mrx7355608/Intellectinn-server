@@ -34,7 +34,7 @@ export function setupSessions(app) {
         cookie: {
             secure: false,
             httpOnly: true,
-            maxAge: 24 * 3600 * 1000,
+            maxAge: 10 * 24 * 3600 * 1000,
         },
         resave: false,
         saveUninitialized: false,

@@ -230,7 +230,7 @@ export function ArticleServices({ articlesDB }) {
             userId,
             operation,
         );
-        return updatedArticle.likes;
+        return updatedArticle;
     };
 
     /*

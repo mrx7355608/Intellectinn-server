@@ -8,6 +8,7 @@ let agent;
 describe("Articles e2e tests", () => {
     let cookies;
     let myId;
+    let articleId;
 
     beforeAll(async () => {
         await connectDB(process.env.TEST_DB_URL);
@@ -67,16 +68,17 @@ describe("Articles e2e tests", () => {
                 likes: [],
                 bookmarkedBy: [],
             });
+
+            articleId = response.body.data._id;
         });
     });
     describe("Edit articles", () => {
-        const articleID = "6612bb9433e2d725a58b1489";
         it("should validate new article data", async () => {
             const changes = {
                 thumbnail: "jsdfkasjdfkasdf",
             };
             const response = await agent
-                .patch(`/api/articles/${articleID}`)
+                .patch(`/api/articles/${articleId}`)
                 .set("Cookie", cookies)
                 .send(changes)
                 .expect(400);
@@ -84,7 +86,7 @@ describe("Articles e2e tests", () => {
         });
         it("should edit article", async () => {
             const response = await agent
-                .patch(`/api/articles/${articleID}`)
+                .patch(`/api/articles/${articleId}`)
                 .set("Cookie", cookies)
                 .send({
                     title: "Updated test article - 1",
@@ -99,7 +101,8 @@ describe("Articles e2e tests", () => {
     describe("Like / Dislike Articles", () => {
         it("Like article", async () => {
             const response = await agent
-                .patch("/api/articles/like-dislike/1123123123")
+                .patch(`/api/articles/like-dislike/${articleId}`)
+                .set("Cookie", cookies)
                 .expect(200);
             expect(response.body.data.likes).toContain(myId);
         });

@@ -25,8 +25,11 @@ describe("Signup Validator", () => {
         });
         it("should throw error if fullname is way too long", () => {
             expect(() =>
-                signupValidator({ ...data, fullname: "a huge huge huge name" }),
-            ).toThrow("Full name cannot be longer than 15 characters");
+                signupValidator({
+                    ...data,
+                    fullname: "a huge huge huge huge huge huge name",
+                }),
+            ).toThrow("Full name cannot be longer than 30 characters");
         });
         it("should throw error if fullname is not a text value", () => {
             expect(() => signupValidator({ ...data, fullname: null })).toThrow(

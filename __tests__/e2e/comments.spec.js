@@ -22,26 +22,24 @@ describe("Comments e2e tests", () => {
 
     afterAll(async () => await disconnectDB());
 
-    const articleID = "6612bb9433e2d725a58b1489";
-
     describe("Get comments", () => {
         it("should validate article id", async () => {
-            const articleID = "invalid-id";
             const response = await agent
-                .get(`/api/comments/${articleID}`)
+                .get("/api/comments/21312313")
                 .expect(400);
             expect(response.body.error).toBe("Invalid article id");
         });
+
         it("should throw error if article does not exist", async () => {
-            const articleID = "6612b31ce549999140624707";
             const response = await agent
-                .get(`/api/comments/${articleID}`)
+                .get("/api/comments/66f28d8443384eefd39a775c")
                 .expect(404);
             expect(response.body.error).toBe("Article not found");
         });
+
         it("should fetch comments of an article in the desired format", async () => {
             const response = await agent
-                .get(`/api/comments/${articleID}`)
+                .get("/api/comments/66f598956b7878ff42c3c95d")
                 .expect(200);
             expect(response.body.data[0]).toStrictEqual({
                 _id: expect.any(String),
@@ -59,16 +57,16 @@ describe("Comments e2e tests", () => {
         });
     });
     describe("Post comments", () => {
-        it.skip("should create comment", async () => {
+        it("should create comment", async () => {
             const response = await agent
-                .post(`/api/comments/${articleID}`)
+                .post("/api/comments/66f598956b7878ff42c3c95d")
                 .set("Cookie", cookies)
                 .send({
                     text: "I was wondering about this and finally this article helped me",
                 })
                 .expect(201);
             expect(response.body.data.text).toBe(
-                "I was wondering about this and finally this article helped me"
+                "I was wondering about this and finally this article helped me",
             );
         });
     });
