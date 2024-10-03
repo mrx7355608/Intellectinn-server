@@ -56,8 +56,8 @@ const deleteUser = catchAsyncError(async (httpObject) => {
 });
 
 const getUserProfile = catchAsyncError(async (httpObject) => {
-    const { userID } = httpObject.params;
-    const user = await userServices.listUserProfile(userID);
+    const { userID, contentType } = httpObject.params;
+    const user = await userServices.listUserProfile(userID, contentType);
     return {
         status: 200,
         data: user,

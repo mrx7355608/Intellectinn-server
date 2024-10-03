@@ -2,7 +2,6 @@ import { validateMongoID } from "../../utils/validateMongoId.js";
 import { ApiError } from "../../utils/ApiError.js";
 import { editDataValidator } from "./user.validators.js";
 import { filterUnwantedFields } from "../../utils/filterUnwantedFields.js";
-import { ArticleModel } from "../articles/articles.model.js";
 
 export function UserServices({ usersDB }) {
     const _userExists = async (id) => {
