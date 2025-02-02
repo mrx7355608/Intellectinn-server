@@ -5,10 +5,8 @@ import bcrypt from "bcryptjs";
 
 export function AuthServices({ usersDB }) {
     const signup = async (data) => {
-        // Validate data
         signupValidator(data);
 
-        // Check if user exists
         const userExists = await usersDB.findUserByEmail(data.email);
         if (userExists) {
             throw new ApiError(
@@ -17,7 +15,6 @@ export function AuthServices({ usersDB }) {
             );
         }
 
-        // Save user in database
         const newUser = await usersDB.insertNewUser(data);
 
         // Removing un-necessary fields from newUser object
@@ -89,5 +86,16 @@ export function AuthServices({ usersDB }) {
 
     const resetPassword = async () => {};
 
-    return { signup, changePassword, verifyAccount, resetPassword };
+    const userExists = async (email) => {
+        const user = await usersDB.findUserByEmail(email);
+        if (!user) {
+            throw new ApiError(
+                "Email is already registered, use a different email",
+                400,
+            );
+        }
+        return user;
+    };
+
+    return { signup, changePassword, userExists, verifyAccount, resetPassword };
 }
